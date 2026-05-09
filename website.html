@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌟 AI启蒙乐园 — 小朋友的人工智能第一课</title>
+<meta name="description" content="专为8-14岁儿童设计的AI启蒙互动教程，通过绘本风格的故事、游戏和实验，让孩子轻松理解人工智能。">
+<style>
+/* ============================================================
+   CSS Reset & Design Tokens
+   ============================================================ */
+  @import url('https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
+
+  :root {
+    --yellow: #FFD93D;
+    --yellow-light: #FFF3BF;
+    --pink: #FF8FA3;
+    --pink-light: #FFE4E9;
+    --blue: #6CB4F5;
+    --blue-light: #E3F2FD;
+    --green: #6BCB77;
+    --green-light: #E8F5E9;
+    --purple: #B39DDB;
+    --purple-light: #EDE7F6;
+    --orange: #FFB74D;
+    --orange-light: #FFF3E0;
+    --bg: #FFFDF7;
+    --bg-alt: #FFF9F0;
+    --text: #4A3728;
+    --text-light: #8B7355;
+    --card-bg: #FFFFFF;
+    --radius: 24px;
+    --shadow: 0 4px 24px rgba(0,0,0,0.06);
+    --shadow-hover: 0 12px 40px rgba(0,0,0,0.10);
+    --font-title: 'ZCOOL KuaiLe', 'Noto Sans SC', cursive;
+    --font-body: 'Noto Sans SC', 'Microsoft YaHei', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; font-size: 16px; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ============================================================
+     Decorative Background
+     ============================================================ */
+  .bg-decor {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 0; opacity: 0.4;
+  }
+  .bg-blob {
+    position: absolute; border-radius: 50%; filter: blur(80px);
+  }
+  .bg-blob:nth-child(1) {
+    width: 400px; height: 400px;
+    background: var(--yellow-light);
+    top: -100px; left: -100px;
+  }
+  .bg-blob:nth-child(2) {
+    width: 350px; height: 350px;
+    background: var(--pink-light);
+    top: 40%; right: -120px;
+  }
+  .bg-blob:nth-child(3) {
+    width: 300px; height: 300px;
+    background: var(--blue-light);
+    bottom: 10%; left: 30%;
+  }
+  .bg-blob:nth-child(4) {
+    width: 280px; height: 280px;
+    background: var(--green-light);
+    top: 60%; left: -80px;
+  }
+
+  /* ============================================================
+     Navigation
+     ============================================================ */
+  .nav {
+    position: sticky; top: 0; z-index: 1000;
+    background: rgba(255,253,247,0.85); backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    padding: 0 24px;
+  }
+  .nav-inner {
+    max-width: 1100px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 64px;
+  }
+  .nav-logo {
+    font-family: var(--font-title);
+    font-size: 1.5em; color: var(--text);
+    text-decoration: none;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .nav-links {
+    display: flex; gap: 4px; list-style: none;
+  }
+  .nav-links a {
+    text-decoration: none; color: var(--text-light);
+    padding: 8px 18px; border-radius: 50px;
+    font-size: 0.95em; font-weight: 500;
+    transition: all 0.3s;
+  }
+  .nav-links a:hover {
+    background: var(--yellow-light); color: var(--text);
+  }
+  .nav-hamburger {
+    display: none; background: none; border: none;
+    font-size: 1.6em; cursor: pointer; color: var(--text);
+  }
+
+  /* ============================================================
+     Layout
+     ============================================================ */
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+
+  section { padding: 80px 0; }
+
+  .section-title {
+    font-family: var(--font-title);
+    font-size: 2.2em; text-align: center;
+    margin-bottom: 16px; color: var(--text);
+  }
+  .section-subtitle {
+    text-align: center; color: var(--text-light);
+    font-size: 1.1em; margin-bottom: 48px;
+  }
+
+  /* ============================================================
+     Hero
+     ============================================================ */
+  .hero {
+    text-align: center; padding: 80px 24px 60px;
+    position: relative; z-index: 1;
+  }
+  .hero-emoji {
+    font-size: 100px; display: inline-block;
+    animation: heroBounce 2s ease-in-out infinite;
+  }
+  @keyframes heroBounce {
+    0%, 100% { transform: translateY(0) rotate(-5deg); }
+    50% { transform: translateY(-24px) rotate(5deg); }
+  }
+  .hero h1 {
+    font-family: var(--font-title);
+    font-size: clamp(2em, 5vw, 3.5em);
+    background: linear-gradient(135deg, #FF8FA3, #FFB74D, #6BCB77, #6CB4F5);
+    background-size: 300% 300%;
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: heroGrad 6s ease infinite;
+    margin: 16px 0;
+  }
+  @keyframes heroGrad {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+  .hero p {
+    font-size: 1.2em; color: var(--text-light);
+    max-width: 600px; margin: 0 auto 32px;
+  }
+  .hero-btns { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+
+  /* ============================================================
+     Buttons
+     ============================================================ */
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 14px 32px; border-radius: 50px;
+    font-size: 1.05em; font-weight: 600; font-family: var(--font-body);
+    text-decoration: none; cursor: pointer;
+    transition: all 0.3s; border: none;
+  }
+  .btn-primary { background: var(--yellow); color: var(--text); box-shadow: 0 4px 16px rgba(255,217,61,0.4); }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(255,217,61,0.5); }
+  .btn-secondary { background: #fff; color: var(--text); border: 2px solid #E8E0D5; }
+  .btn-secondary:hover { border-color: var(--yellow); background: var(--yellow-light); }
+  .btn-sm { padding: 8px 20px; font-size: 0.9em; }
+  .btn:active { transform: scale(0.96); }
+
+  /* ============================================================
+     About Section
+     ============================================================ */
+  .about-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 24px;
+  }
+  .about-card {
+    background: var(--card-bg); border-radius: var(--radius);
+    padding: 32px 24px; box-shadow: var(--shadow);
+    text-align: center; transition: all 0.3s;
+  }
+  .about-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
+  .about-card .icon { font-size: 3em; margin-bottom: 12px; }
+  .about-card h3 { font-family: var(--font-title); font-size: 1.3em; margin-bottom: 8px; }
+  .about-card p { color: var(--text-light); font-size: 0.95em; }
+
+  /* ============================================================
+     Course Cards
+     ============================================================ */
+  .course-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 24px;
+  }
+  .course-card {
+    background: var(--card-bg); border-radius: var(--radius);
+    box-shadow: var(--shadow); overflow: hidden;
+    transition: all 0.3s; display: flex; flex-direction: column;
+    border: 2px solid transparent;
+  }
+  .course-card:hover {
+    transform: translateY(-6px); box-shadow: var(--shadow-hover);
+    border-color: var(--yellow);
+  }
+  .course-card-header {
+    padding: 28px 24px 16px; text-align: center;
+  }
+  .course-card-header .emoji { font-size: 3em; }
+  .course-card-header .chapter {
+    display: inline-block; padding: 4px 14px;
+    border-radius: 50px; font-size: 0.8em; font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .course-card-body { padding: 0 24px 24px; flex: 1; }
+  .course-card-body h3 {
+    font-family: var(--font-title); font-size: 1.25em; margin-bottom: 8px;
+  }
+  .course-card-body p { color: var(--text-light); font-size: 0.92em; }
+  .course-card-footer {
+    padding: 16px 24px; border-top: 1px solid #F0EBE3;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .course-tag {
+    font-size: 0.8em; padding: 4px 12px;
+    border-radius: 50px; font-weight: 500;
+  }
+
+  /* ============================================================
+     Interactive Lab Section
+     ============================================================ */
+  .lab-tabs {
+    display: flex; gap: 8px; justify-content: center;
+    flex-wrap: wrap; margin-bottom: 32px;
+  }
+  .lab-tab {
+    padding: 10px 24px; border-radius: 50px;
+    border: 2px solid #E8E0D5; background: #fff;
+    font-family: var(--font-body); font-size: 0.95em; font-weight: 500;
+    cursor: pointer; transition: all 0.3s; color: var(--text-light);
+  }
+  .lab-tab:hover { border-color: var(--yellow); }
+  .lab-tab.active {
+    background: var(--yellow); border-color: var(--yellow);
+    color: var(--text); font-weight: 700;
+  }
+  .lab-panel { display: none; }
+  .lab-panel.active { display: block; animation: fadeIn .5s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+  .lab-card {
+    background: var(--card-bg); border-radius: var(--radius);
+    box-shadow: var(--shadow); padding: 32px;
+    max-width: 800px; margin: 0 auto;
+  }
+  .lab-card h3 { font-family: var(--font-title); font-size: 1.4em; margin-bottom: 16px; }
+
+  /* Prompt Comparator */
+  .prompt-compare {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+  }
+  .prompt-col {
+    background: #FAFAFA; border-radius: 16px; padding: 20px;
+    border: 1px solid #EEE;
+  }
+  .prompt-col h4 { font-size: 1em; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+  .prompt-col textarea {
+    width: 100%; height: 80px; padding: 12px; border-radius: 12px;
+    border: 2px solid #E8E0D5; font-family: var(--font-body);
+    font-size: 0.9em; resize: vertical; background: #fff;
+    transition: border-color 0.3s;
+  }
+  .prompt-col textarea:focus { outline: none; border-color: var(--blue); }
+  .prompt-output {
+    margin-top: 12px; padding: 14px; border-radius: 12px;
+    font-size: 0.9em; min-height: 60px;
+    background: #fff; border: 1px dashed #DDD;
+    color: var(--text-light);
+  }
+  .prompt-output.has-content { border-style: solid; border-color: #E0E0E0; color: var(--text); }
+
+  /* AI Guess Canvas */
+  .draw-area {
+    text-align: center;
+  }
+  .draw-canvas-wrap {
+    display: inline-block; border-radius: 20px; overflow: hidden;
+    border: 3px solid #E8E0D5; position: relative;
+  }
+  #drawCanvas { display: block; cursor: crosshair; background: #fff; }
+  .draw-tools {
+    display: flex; gap: 10px; justify-content: center;
+    flex-wrap: wrap; margin: 16px 0;
+  }
+  .draw-tool {
+    width: 40px; height: 40px; border-radius: 50%;
+    border: 3px solid transparent; cursor: pointer;
+    transition: all 0.2s;
+  }
+  .draw-tool:hover { transform: scale(1.15); }
+  .draw-tool.active { border-color: var(--text); transform: scale(1.1); }
+
+  /* Ethics Theater */
+  .theater-scene {
+    background: linear-gradient(135deg, #FFF9F0, #FFF3E0);
+    border-radius: 20px; padding: 28px; text-align: center;
+    min-height: 280px; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    position: relative;
+  }
+  .theater-emoji { font-size: 4em; margin-bottom: 12px; }
+  .theater-text { font-size: 1.1em; max-width: 500px; margin: 0 auto 20px; line-height: 1.8; }
+  .theater-choices { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
+  .theater-choice {
+    padding: 14px 24px; border-radius: 50px;
+    border: 2px solid #E8E0D5; background: #fff;
+    font-family: var(--font-body); font-size: 0.95em;
+    cursor: pointer; transition: all 0.3s;
+  }
+  .theater-choice:hover {
+    border-color: var(--purple);
+    background: var(--purple-light);
+    transform: translateY(-2px);
+  }
+  .theater-result {
+    margin-top: 16px; padding: 16px 20px;
+    border-radius: 16px; font-weight: 500;
+    animation: fadeIn .5s ease;
+  }
+
+  /* ============================================================
+     Footer
+     ============================================================ */
+  .footer {
+    background: #4A3728; color: #D4C5B9;
+    padding: 48px 24px 32px; position: relative; z-index: 1;
+  }
+  .footer-inner {
+    max-width: 1100px; margin: 0 auto;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 32px;
+  }
+  .footer h4 {
+    font-family: var(--font-title);
+    color: #fff; font-size: 1.1em; margin-bottom: 12px;
+  }
+  .footer p, .footer a { font-size: 0.9em; color: #B8A99A; text-decoration: none; line-height: 2; }
+  .footer a:hover { color: var(--yellow); }
+  .footer-bottom {
+    max-width: 1100px; margin: 32px auto 0;
+    padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.1);
+    text-align: center; font-size: 0.85em; color: #8B7B6B;
+  }
+
+  /* ============================================================
+     Floating cloud decorations
+     ============================================================ */
+  .cloud {
+    position: absolute; pointer-events: none;
+    background: #fff; border-radius: 50%;
+    opacity: 0.6;
+  }
+  .cloud::before, .cloud::after {
+    content: ''; position: absolute; background: #fff; border-radius: 50%;
+  }
+
+  /* ============================================================
+     Responsive
+     ============================================================ */
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .nav-links.open {
+      display: flex; flex-direction: column;
+      position: absolute; top: 64px; left: 0; right: 0;
+      background: rgba(255,253,247,0.95); backdrop-filter: blur(16px);
+      padding: 16px; gap: 8px; border-bottom: 1px solid rgba(0,0,0,0.06);
+    }
+    .nav-hamburger { display: block; }
+    .prompt-compare { grid-template-columns: 1fr; }
+    .hero-emoji { font-size: 70px; }
+    section { padding: 48px 0; }
+    .section-title { font-size: 1.7em; }
+  }
+
+  @media (max-width: 480px) {
+    .course-grid { grid-template-columns: 1fr; }
+    .about-grid { grid-template-columns: 1fr; }
+    .lab-card { padding: 20px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- 装饰性背景 -->
+<div class="bg-decor">
+  <div class="bg-blob"></div>
+  <div class="bg-blob"></div>
+  <div class="bg-blob"></div>
+  <div class="bg-blob"></div>
+</div>
+
+<!-- ============================================================
+     Navigation
+     ============================================================ -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">🤖 AI启蒙乐园</a>
+    <button class="nav-hamburger" id="hamburger" aria-label="菜单">☰</button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about">📖 关于AI</a></li>
+      <li><a href="#courses">📚 课程</a></li>
+      <li><a href="#lab">🧪 玩一玩</a></li>
+      <li><a href="#footer-contact">📬 联系</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ============================================================
+     Hero
+     ============================================================ -->
+<header class="hero">
+  <div class="hero-emoji">🤖</div>
+  <h1>小朋友的 AI 启蒙第一课</h1>
+  <p>像读绘本一样学 AI！通过故事、游戏和动手实验，轻松理解人工智能的奇妙世界。适合 8-14 岁。</p>
+  <div class="hero-btns">
+    <a href="#courses" class="btn btn-primary">📚 开始学习</a>
+    <a href="#lab" class="btn btn-secondary">🧪 互动实验</a>
+  </div>
+</header>
+
+<!-- ============================================================
+     About Section
+     ============================================================ -->
+<section id="about">
+  <div class="container">
+    <h2 class="section-title">✨ AI 是什么？</h2>
+    <p class="section-subtitle">三句话讲清楚人工智能</p>
+    <div class="about-grid">
+      <div class="about-card">
+        <div class="icon">🧠</div>
+        <h3>会学习的程序</h3>
+        <p>AI 就像一个聪明的电脑程序，你给它看很多例子，它就能自己找到规律。</p>
+      </div>
+      <div class="about-card">
+        <div class="icon">🐶</div>
+        <h3>像训练宠物</h3>
+        <p>就像教小狗"坐下"、"握手"一样，人类用数据来"训练"AI 学会各种本领。</p>
+      </div>
+      <div class="about-card">
+        <div class="icon">🔧</div>
+        <h3>是一个工具</h3>
+        <p>AI 就像锤子和剪刀，它好不好取决于使用它的人。我们要学做聪明的使用者！</p>
+      </div>
+      <div class="about-card">
+        <div class="icon">🌍</div>
+        <h3>已经无处不在</h3>
+        <p>语音助手、人脸识别、自动驾驶、智能推荐……AI 早已融入我们的日常生活。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     Courses Section
+     ============================================================ -->
+<section id="courses" style="background: var(--bg-alt);">
+  <div class="container">
+    <h2 class="section-title">📚 六堂趣味课程</h2>
+    <p class="section-subtitle">每课 10 分钟，边玩边学，循序渐进</p>
+
+    <div class="course-grid">
+
+      <!-- 第1课 -->
+      <div class="course-card">
+        <div class="course-card-header">
+          <div class="emoji">🐶</div>
+          <span class="chapter" style="background:var(--pink-light);color:#D4687C;">第一课</span>
+        </div>
+        <div class="course-card-body">
+          <h3>AI 是什么？</h3>
+          <p>把 AI 想象成一只虚拟宠物小狗，你教它越多，它越聪明。了解 AI 能做什么：语音识别、图像辨认、自动驾驶……</p>
+        </div>
+        <div class="course-card-footer">
+          <span class="course-tag" style="background:var(--pink-light);color:#D4687C;">🎯 互动：训练AI宠物</span>
+          <span style="font-size:0.85em;color:#999;">⏱ 10分钟</span>
+        </div>
+      </div>
+
+      <!-- 第2课 -->
+      <div class="course-card">
+        <div class="course-card-header">
+          <div class="emoji">📝</div>
+          <span class="chapter" style="background:var(--orange-light);color:#E67E22;">第二课</span>
+        </div>
+        <div class="course-card-body">
+          <h3>AI 怎么学习？</h3>
+          <p>像背单词一样，AI 通过大量例子来学习规律。了解"监督学习"和"强化学习"两种最基本的方法。</p>
+        </div>
+        <div class="course-card-footer">
+          <span class="course-tag" style="background:var(--orange-light);color:#E67E22;">🎯 互动：可视化分类器</span>
+          <span style="font-size:0.85em;color:#999;">⏱ 10分钟</span>
+        </div>
+      </div>
+
+      <!-- 第3课 -->
+      <div class="course-card">
+        <div class="course-card-header">
+          <div class="emoji">🧠</div>
+          <span class="chapter" style="background:var(--yellow-light);color:#B8860B;">第三课</span>
+        </div>
+        <div class="course-card-body">
+          <h3>神经网络的秘密</h3>
+          <p>AI 的"大脑"模仿了人脑结构！了解输入层、隐藏层、输出层是怎样层层传递信息，最终做出判断的。</p>
+        </div>
+        <div class="course-card-footer">
+          <span class="course-tag" style="background:var(--yellow-light);color:#B8860B;">🎯 互动：发信号看传播</span>
+          <span style="font-size:0.85em;color:#999;">⏱ 10分钟</span>
+        </div>
+      </div>
+
+      <!-- 第4课 -->
+      <div class="course-card">
+        <div class="course-card-header">
+          <div class="emoji">🎮</div>
+          <span class="chapter" style="background:var(--green-light);color:#2E7D32;">第四课</span>
+        </div>
+        <div class="course-card-body">
+          <h3>AI训练师挑战</h3>
+          <p>亲身体验训练一个AI！通过不断给AI看猫和狗的图片，看它如何从"一无所知"变得越来越准确。</p>
+        </div>
+        <div class="course-card-footer">
+          <span class="course-tag" style="background:var(--green-light);color:#2E7D32;">🎯 互动：KNN分类游戏</span>
+          <span style="font-size:0.85em;color:#999;">⏱ 10分钟</span>
+        </div>
+      </div>
+
+      <!-- 第5课 -->
+      <div class="course-card">
+        <div class="course-card-header">
+          <div class="emoji">🔍</div>
+          <span class="chapter" style="background:var(--blue-light);color:#1565C0;">第五课</span>
+        </div>
+        <div class="course-card-body">
+          <h3>AI 也会犯错</h3>
+          <p>AI 不是万能的！它可能带着"偏见"看世界。了解数据偏见、能耗问题、以及为什么AI需要人类的监督。</p>
+        </div>
+        <div class="course-card-footer">
+          <span class="course-tag" style="background:var(--blue-light);color:#1565C0;">🎯 互动：偏见对比实验</span>
+          <span style="font-size:0.85em;color:#999;">⏱ 10分钟</span>
+        </div>
+      </div>
+
+      <!-- 第6课 -->
+      <div class="course-card">
+        <div class="course-card-header">
+          <div class="emoji">🚀</div>
+          <span class="chapter" style="background:var(--purple-light);color:#6A1B9A;">第六课</span>
+        </div>
+        <div class="course-card-body">
+          <h3>想象AI的未来</h3>
+          <p>10年后的世界会是什么样？AI医生、AI农夫、AI老师……发挥你的想象力，设计你自己的AI发明！</p>
+        </div>
+        <div class="course-card-footer">
+          <span class="course-tag" style="background:var(--purple-light);color:#6A1B9A;">🎯 互动：AI创意画板</span>
+          <span style="font-size:0.85em;color:#999;">⏱ 10分钟</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     Interactive Lab
+     ============================================================ -->
+<section id="lab">
+  <div class="container">
+    <h2 class="section-title">🧪 动手实验室</h2>
+    <p class="section-subtitle">三个互动实验，亲手体验 AI 的奇妙</p>
+
+    <!-- Lab Tabs -->
+    <div class="lab-tabs">
+      <button class="lab-tab active" data-tab="0">✍️ 提示词对比器</button>
+      <button class="lab-tab" data-tab="1">🎨 AI猜画游戏</button>
+      <button class="lab-tab" data-tab="2">🎭 AI伦理小剧场</button>
+    </div>
+
+    <!-- ========== Lab 1: Prompt Comparator ========== -->
+    <div class="lab-panel active" data-panel="0">
+      <div class="lab-card">
+        <h3>✍️ 提示词对比器 —— 学会跟 AI 说话</h3>
+        <p style="color:var(--text-light);margin-bottom:20px;">
+          跟 AI 聊天就像跟一个<b>非常聪明但不太懂你</b>的外星人说话。你说的越清楚，它回答得越好！
+          试试下面的对比实验 👇
+        </p>
+        <div class="prompt-compare">
+          <div class="prompt-col">
+            <h4>😕 模糊的提示词</h4>
+            <textarea id="vaguePrompt" placeholder="例如：写一个故事">写一个故事</textarea>
+            <button class="btn btn-sm btn-secondary" onclick="runPromptCompare()" style="margin-top:8px;">▶ 看看AI怎么回答</button>
+            <div class="prompt-output" id="vagueOutput"></div>
+          </div>
+          <div class="prompt-col">
+            <h4>😊 清晰的提示词</h4>
+            <textarea id="clearPrompt" placeholder="例如：写一个关于勇敢的小兔子在月亮上探险的睡前故事，适合5岁小朋友听，200字左右，要有友爱和勇气的主题">写一个关于勇敢的小兔子在月亮上探险的睡前故事，适合5岁小朋友听，200字左右，要有友爱和勇气的主题</textarea>
+            <button class="btn btn-sm btn-primary" onclick="runPromptCompare()" style="margin-top:8px;">▶ 看看AI怎么回答</button>
+            <div class="prompt-output" id="clearOutput"></div>
+          </div>
+        </div>
+        <div class="info-box" style="margin-top:16px;background:var(--yellow-light);border-radius:14px;padding:14px 18px;">
+          💡 <b>发现了吗？</b>模糊提示词让 AI "猜"你想要什么，结果往往很随机。清晰的提示词给了 AI <b>角色、场景、长度、主题</b>，答案就精准多了！这就是 <b>提示词工程</b>（Prompt Engineering）的魔力。
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== Lab 2: AI Draw & Guess ========== -->
+    <div class="lab-panel" data-panel="1">
+      <div class="lab-card">
+        <h3>🎨 AI 猜画 —— 你画我猜</h3>
+        <p style="color:var(--text-light);margin-bottom:20px;">
+          在画布上画一个东西（比如🍎苹果、🏠房子、🌞太阳），然后点"猜一猜"，看 AI 怎么分析你的画！
+          <br><small>提示：画得越像，AI 猜得越准哦~</small>
+        </p>
+        <div class="draw-area">
+          <div class="draw-tools">
+            <span style="line-height:40px;margin-right:8px;">画笔颜色：</span>
+            <div class="draw-tool active" style="background:#333;" data-color="#333" title="黑色"></div>
+            <div class="draw-tool" style="background:#FF6B6B;" data-color="#FF6B6B" title="红色"></div>
+            <div class="draw-tool" style="background:#4D96FF;" data-color="#4D96FF" title="蓝色"></div>
+            <div class="draw-tool" style="background:#6BCB77;" data-color="#6BCB77" title="绿色"></div>
+            <div class="draw-tool" style="background:#FFB74D;" data-color="#FFB74D" title="橙色"></div>
+            <span style="line-height:40px;margin:0 8px;">|</span>
+            <button class="btn btn-sm btn-secondary" onclick="setBrushSize(3)">细笔</button>
+            <button class="btn btn-sm btn-secondary" onclick="setBrushSize(8)">中笔</button>
+            <button class="btn btn-sm btn-secondary" onclick="setBrushSize(16)">粗笔</button>
+          </div>
+          <div class="draw-canvas-wrap">
+            <canvas id="drawCanvas" width="500" height="350"></canvas>
+          </div>
+          <div style="margin-top:16px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+            <button class="btn btn-primary" onclick="aiGuess()">🤖 AI 猜一猜！</button>
+            <button class="btn btn-secondary" onclick="clearDrawCanvas()">🗑️ 清空画布</button>
+          </div>
+          <div id="guessResult" style="margin-top:16px;min-height:28px;font-size:1.05em;"></div>
+          <div id="guessDetails" style="font-size:0.9em;color:var(--text-light);"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== Lab 3: AI Ethics Theater ========== -->
+    <div class="lab-panel" data-panel="2">
+      <div class="lab-card">
+        <h3>🎭 AI 伦理小剧场 —— 你会怎么做？</h3>
+        <p style="color:var(--text-light);margin-bottom:20px;">
+          阅读下面的情景故事，做出你的选择，看看不同的决定会带来怎样的后果。
+        </p>
+        <div class="theater-scene" id="theaterScene">
+          <div class="theater-emoji" id="theaterEmoji">🏫</div>
+          <div class="theater-text" id="theaterText">
+            <b>情景：AI 在学校</b><br><br>
+            学校引入了一个 AI 系统，可以自动批改作文。但它有时候会给写得很有创意但不按套路的作文打低分。
+            <br><br>如果你是这个 AI 的设计者，你会怎么做？
+          </div>
+          <div class="theater-choices" id="theaterChoices">
+            <button class="theater-choice" onclick="theaterChoose(0)">🔧 改进 AI，让它也欣赏创意</button>
+            <button class="theater-choice" onclick="theaterChoose(1)">📋 坚持只用 AI 打分，效率第一</button>
+            <button class="theater-choice" onclick="theaterChoose(2)">🤝 AI打分 + 老师复核</button>
+          </div>
+          <div id="theaterResult"></div>
+        </div>
+        <button class="btn btn-secondary" onclick="resetTheater()" style="margin-top:16px;">🔄 再来一题</button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================================
+     Footer
+     ============================================================ -->
+<footer class="footer" id="footer-contact">
+  <div class="footer-inner">
+    <div>
+      <h4>🤖 AI启蒙乐园</h4>
+      <p>专为 8-14 岁儿童设计的<br>人工智能互动启蒙教程</p>
+      <p style="margin-top:8px;">🌟 让每个孩子都懂一点 AI</p>
+    </div>
+    <div>
+      <h4>📚 课程导航</h4>
+      <a href="#about">认识 AI</a><br>
+      <a href="#courses">全部课程</a><br>
+      <a href="#lab">互动实验</a>
+    </div>
+    <div>
+      <h4>🔗 推荐资源</h4>
+      <a href="https://scratch.mit.edu" target="_blank" rel="noopener">Scratch 编程</a><br>
+      <a href="https://code.org" target="_blank" rel="noopener">Code.org</a><br>
+      <a href="https://quickdraw.withgoogle.com" target="_blank" rel="noopener">Google 你画我猜</a><br>
+      <a href="https://teachablemachine.withgoogle.com" target="_blank" rel="noopener">Teachable Machine</a>
+    </div>
+    <div>
+      <h4>📬 联系我们</h4>
+      <p>📧 hello@aikids.edu</p>
+      <p>💬 微信公众号：AI启蒙乐园</p>
+      <p>🌐 本网站完全免费开源</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>本教程由 Claude（Anthropic AI 助手）协助编写 · 内容仅供教育用途 · 2026年</p>
+    <p style="margin-top:4px;">🛡️ 我们倡导安全、负责任地使用 AI 技术</p>
+  </div>
+</footer>
+
+<!-- ============================================================
+     JavaScript
+     ============================================================ -->
+<script>
+// ==================== 导航汉堡菜单 ====================
+(function nav(){
+  const btn = document.getElementById('hamburger');
+  const links = document.getElementById('navLinks');
+  btn.addEventListener('click', () => {
+    links.classList.toggle('open');
+  });
+  // 点击链接后关闭
+  links.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => links.classList.remove('open'));
+  });
+})();
+
+// ==================== Lab Tab 切换 ====================
+(function labTabs(){
+  const tabs = document.querySelectorAll('.lab-tab');
+  const panels = document.querySelectorAll('.lab-panel');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      const idx = parseInt(tab.dataset.tab);
+      panels.forEach(p => p.classList.remove('active'));
+      panels[idx].classList.add('active');
+    });
+  });
+})();
+
+// ==================== 实验1: 提示词对比器 ====================
+function runPromptCompare(){
+  const vagueInput = document.getElementById('vaguePrompt').value.trim() || '写一个故事';
+  const clearInput = document.getElementById('clearPrompt').value.trim() || '写一个关于勇敢的小兔子在月亮上探险的睡前故事';
+
+  // 模拟模糊提示词的回复
+  const vagueResponses = [
+    '从前有一个公主，她住在一个城堡里。有一天，她遇到了一只青蛙……（故事很普通，缺乏细节）',
+    '小明去上学，路上看到一只猫，然后他继续走……（故事很平淡，没有重点）',
+    '在一个很远的地方，发生了一些事情，然后大家都过得很开心。完。（故事很模糊）'
+  ];
+
+  // 模拟清晰提示词的回复
+  const clearResponses = [
+    '🌙《小兔子月月登月记》\n\n小兔子月月有一个梦想：去月亮上看看！她造了一艘胡萝卜火箭🚀。\n\n"轰——"火箭飞起来了！月月飞过闪闪的星星，终于落在了软软的月亮上。月亮上住着一只孤独的小玉兔，它看到月月开心极了。\n\n"我们一起玩吧！"月月说。她们在月亮上跳来跳去，用月尘堆雪人，笑声传遍了整个夜空。\n\n天快亮了，月月要回家了。小玉兔依依不舍地说："明天你还会来吗？"\n\n"当然！好朋友天天见！"月月挥挥手，乘着胡萝卜火箭飞回了家。\n\n从那以后，每当月亮又圆又亮的时候，就是月月和小玉兔在一起玩耍呢！\n\n✨ 主题：勇敢追梦 + 友爱陪伴 ✨',
+    '🌙《勇敢的跳跳》\n\n小兔子跳跳望着天上的月亮，心想：那里一定有人需要朋友。\n\n她找来爸爸的旧望远镜，又请小鸟帮忙收集云朵，做了一艘软软的云朵飞船。\n\n呼——飞船升空了！跳跳穿过棉花糖一样的云层，飞了好久好久，终于"噗"地一声落在了月亮上。\n\n"你好呀！"一个银色的影子飘过来——是月亮精灵露露！她一个人守了月亮几千年，从来没有朋友来过。\n\n跳跳和露露一起在环形山上滑滑梯，用月光编花环，还种下了一颗从地球带来的星星种子。\n\n"谢谢你来看我，"露露眼睛亮晶晶的，"这是我收到过最棒的礼物——一个朋友。"\n\n跳跳回到家后，每晚都对着月亮挥手。月亮比以前更亮了——那是露露在回应呢！\n\n💫 主题：勇气带来友谊，友谊点亮世界 💫'
+  ];
+
+  const vagueOutput = document.getElementById('vagueOutput');
+  const clearOutput = document.getElementById('clearOutput');
+
+  vagueOutput.textContent = vagueResponses[Math.floor(Math.random() * vagueResponses.length)];
+  vagueOutput.classList.add('has-content');
+
+  clearOutput.textContent = clearResponses[Math.floor(Math.random() * clearResponses.length)];
+  clearOutput.classList.add('has-content');
+}
+
+// ==================== 实验2: AI猜画游戏 ====================
+(function drawGame(){
+  const canvas = document.getElementById('drawCanvas');
+  const ctx = canvas.getContext('2d');
+  let drawing = false;
+  let brushColor = '#333';
+  let brushSize = 8;
+  let strokes = [];
+
+  // 设置白色背景
+  ctx.fillStyle = '#fff';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  function getPos(e){
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    return {
+      x: (e.clientX - rect.left) * scaleX,
+      y: (e.clientY - rect.top) * scaleY
+    };
+  }
+
+  canvas.addEventListener('mousedown', e => {
+    drawing = true;
+    const pos = getPos(e);
+    ctx.beginPath();
+    ctx.moveTo(pos.x, pos.y);
+    ctx.strokeStyle = brushColor;
+    ctx.lineWidth = brushSize;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+  });
+
+  canvas.addEventListener('mousemove', e => {
+    if (!drawing) return;
+    const pos = getPos(e);
+    ctx.lineTo(pos.x, pos.y);
+    ctx.stroke();
+  });
+
+  canvas.addEventListener('mouseup', () => { drawing = false; saveStrokes(); });
+  canvas.addEventListener('mouseleave', () => { drawing = false; saveStrokes(); });
+
+  // 触摸事件
+  canvas.addEventListener('touchstart', e => {
+    e.preventDefault(); drawing = true;
+    const pos = getPos(e.touches[0]);
+    ctx.beginPath(); ctx.moveTo(pos.x, pos.y);
+    ctx.strokeStyle = brushColor;
+    ctx.lineWidth = brushSize;
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  });
+  canvas.addEventListener('touchmove', e => {
+    e.preventDefault();
+    if (!drawing) return;
+    const pos = getPos(e.touches[0]);
+    ctx.lineTo(pos.x, pos.y); ctx.stroke();
+  });
+  canvas.addEventListener('touchend', () => { drawing = false; saveStrokes(); });
+
+  function saveStrokes(){
+    strokes.push(canvas.toDataURL());
+  }
+
+  // 画笔颜色
+  document.querySelectorAll('.draw-tool[data-color]').forEach(tool => {
+    tool.addEventListener('click', () => {
+      document.querySelectorAll('.draw-tool[data-color]').forEach(t => t.classList.remove('active'));
+      tool.classList.add('active');
+      brushColor = tool.dataset.color;
+    });
+  });
+
+  window.setBrushSize = function(size){
+    brushSize = size;
+  };
+
+  window.clearDrawCanvas = function(){
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    strokes = [];
+    document.getElementById('guessResult').textContent = '';
+    document.getElementById('guessDetails').textContent = '';
+  };
+
+  // AI 猜测逻辑
+  window.aiGuess = function(){
+    // 分析画布像素
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const pixels = imageData.data;
+    let darkPixels = 0, totalPixels = pixels.length / 4;
+
+    // 统计非白色像素
+    for (let i = 0; i < pixels.length; i += 4) {
+      const r = pixels[i], g = pixels[i+1], b = pixels[i+2];
+      // 不是白色/接近白色的像素
+      if (r < 240 || g < 240 || b < 240) {
+        darkPixels++;
+      }
+    }
+
+    const coverage = darkPixels / totalPixels;
+
+    // 分析形状特征
+    const features = analyzeFeatures(imageData, canvas.width, canvas.height);
+
+    // 基于特征做猜测
+    const guesses = generateGuesses(features, coverage);
+
+    const resultDiv = document.getElementById('guessResult');
+    const detailsDiv = document.getElementById('guessDetails');
+
+    if (coverage < 0.005) {
+      resultDiv.innerHTML = '😅 <b>画布几乎是空的！</b>请先画点什么吧~';
+      detailsDiv.textContent = '';
+      return;
+    }
+
+    resultDiv.innerHTML = `🤖 AI 猜测：<b style="font-size:1.2em;">${guesses[0].name}</b> <span style="color:#888;">（置信度：${guesses[0].confidence}%）</span>`;
+    detailsDiv.innerHTML = `
+      <br>其他可能：${guesses.slice(1).map(g => `${g.name} (${g.confidence}%)`).join(' · ')}
+      <br><br><small style="color:#999;">💡 AI 通过分析你画的<b>像素覆盖率(${(coverage*100).toFixed(1)}%)</b>、<b>形状分布</b>、<b>笔画密度</b>等特征来猜测。</small>
+    `;
+  };
+
+  function analyzeFeatures(imageData, w, h){
+    const pixels = imageData.data;
+    let minX = w, maxX = 0, minY = h, maxY = 0;
+    let sumX = 0, sumY = 0, count = 0;
+
+    // 分区域统计
+    const zones = { top:0, bottom:0, left:0, right:0, center:0 };
+    const cx = w/2, cy = h/2;
+
+    for (let y = 0; y < h; y++) {
+      for (let x = 0; x < w; x++) {
+        const idx = (y * w + x) * 4;
+        const r = pixels[idx], g = pixels[idx+1], b = pixels[idx+2];
+        if (r < 240 || g < 240 || b < 240) {
+          if (x < minX) minX = x;
+          if (x > maxX) maxX = x;
+          if (y < minY) minY = y;
+          if (y > maxY) maxY = y;
+          sumX += x; sumY += y; count++;
+
+          if (y < h*0.33) zones.top++;
+          else if (y > h*0.66) zones.bottom++;
+          if (x < w*0.33) zones.left++;
+          else if (x > w*0.66) zones.right++;
+          if (Math.abs(x-cx) < w*0.2 && Math.abs(y-cy) < h*0.2) zones.center++;
+        }
+      }
+    }
+
+    if (count === 0) return { count: 0 };
+
+    const avgX = sumX / count;
+    const avgY = sumY / count;
+    const width = maxX - minX;
+    const height = maxY - minY;
+    const aspectRatio = height > 0 ? width / height : 1;
+    const totalZone = zones.top + zones.bottom + zones.left + zones.right + zones.center || 1;
+    const coverageInBounds = count / (width * height || 1);
+
+    return {
+      count,
+      cx: avgX / w,
+      cy: avgY / h,
+      width: width / w,
+      height: height / h,
+      aspectRatio,
+      roundness: Math.abs(aspectRatio - 1),
+      topBias: zones.top / totalZone,
+      bottomBias: zones.bottom / totalZone,
+      centerBias: zones.center / totalZone,
+      coverageInBounds: Math.min(1, coverageInBounds),
+    };
+  }
+
+  function generateGuesses(features, coverage){
+    if (features.count === 0) return [{name: '?', confidence: 0}];
+
+    const scores = [];
+
+    // 太阳：圆形，在上方，高覆盖率
+    let sunScore = 0;
+    if (features.roundness < 0.4) sunScore += 30;
+    if (features.cy < 0.4) sunScore += 25;
+    if (features.topBias > 0.15) sunScore += 20;
+    if (features.width > 0.15 && features.width < 0.6) sunScore += 15;
+    sunScore += Math.min(10, coverage * 500);
+    scores.push({ name: '🌞 太阳', confidence: Math.round(Math.min(95, sunScore)) });
+
+    // 房子：方形，在下方，有一定宽度
+    let houseScore = 0;
+    if (features.aspectRatio > 0.6 && features.aspectRatio < 1.6) houseScore += 25;
+    if (features.cy > 0.4) houseScore += 20;
+    if (features.bottomBias > 0.15) houseScore += 20;
+    if (features.width > 0.2) houseScore += 15;
+    scores.push({ name: '🏠 房子', confidence: Math.round(Math.min(95, houseScore)) });
+
+    // 树：上小下大，在上方区域
+    let treeScore = 0;
+    if (features.topBias > 0.12 && features.bottomBias > 0.1) treeScore += 25;
+    if (features.aspectRatio > 0.3 && features.aspectRatio < 1.2) treeScore += 20;
+    if (features.cy < 0.55) treeScore += 15;
+    scores.push({ name: '🌳 树', confidence: Math.round(Math.min(95, treeScore)) });
+
+    // 人脸：圆形，居中
+    let faceScore = 0;
+    if (features.roundness < 0.3) faceScore += 30;
+    if (Math.abs(features.cx - 0.5) < 0.15 && Math.abs(features.cy - 0.5) < 0.15) faceScore += 30;
+    if (features.centerBias > 0.1) faceScore += 20;
+    scores.push({ name: '😊 笑脸', confidence: Math.round(Math.min(95, faceScore)) });
+
+    // 苹果：圆形，大小适中
+    let appleScore = 0;
+    if (features.roundness < 0.35) appleScore += 25;
+    if (features.width > 0.1 && features.width < 0.4) appleScore += 20;
+    if (features.centerBias > 0.08) appleScore += 15;
+    scores.push({ name: '🍎 苹果', confidence: Math.round(Math.min(95, appleScore)) });
+
+    // 猫：中等复杂度
+    let catScore = 0;
+    if (features.count > 500) catScore += 20;
+    if (features.topBias > 0.1) catScore += 15;
+    if (features.width > 0.15 && features.width < 0.6) catScore += 15;
+    scores.push({ name: '🐱 猫', confidence: Math.round(Math.min(90, catScore + 5)) });
+
+    // 星星：多个分散的小笔画
+    let starScore = 0;
+    if (coverage < 0.05 && features.count > 100) starScore += 30;
+    if (features.coverageInBounds < 0.3) starScore += 20;
+    scores.push({ name: '⭐ 星星', confidence: Math.round(Math.min(90, starScore + 5)) });
+
+    // 花朵
+    let flowerScore = 0;
+    if (features.centerBias > 0.12) flowerScore += 20;
+    if (features.roundness < 0.4) flowerScore += 18;
+    if (features.cy > 0.3 && features.cy < 0.7) flowerScore += 12;
+    scores.push({ name: '🌸 花朵', confidence: Math.round(Math.min(88, flowerScore + 8)) });
+
+    scores.sort((a, b) => b.confidence - a.confidence);
+    // 稍微混合一下后面的结果使其看起来更自然
+    for (let i = 1; i < scores.length; i++) {
+      scores[i].confidence = Math.max(5, scores[i].confidence - i * 8 + Math.floor(Math.random() * 6));
+    }
+    scores.sort((a, b) => b.confidence - a.confidence);
+    return scores;
+  }
+})();
+
+// ==================== 实验3: AI伦理小剧场 ====================
+(function ethicsTheater(){
+  const scenes = [
+    {
+      emoji: '🏫',
+      text: '<b>情景1：AI 在学校</b><br><br>学校引入了一个 AI 系统，可以自动批改作文。但它有时候会给写得很有创意但不按套路的作文打低分。<br><br>如果你是这个 AI 的设计者，你会怎么做？',
+      choices: ['🔧 改进 AI，让它也欣赏创意', '📋 坚持只用 AI 打分，效率第一', '🤝 AI打分 + 老师复核'],
+      results: [
+        '✅ <b>好选择！</b>你花时间改进了AI，让它学会了识别不同类型的"好作文"。现在每个孩子的创意都能被看见了！🌟',
+        '⚠️ <b>不太好的选择。</b>效率虽然高，但许多有创意的小朋友被埋没了。有些孩子开始只写"AI喜欢的作文"，失去了写作的乐趣。',
+        '🌟 <b>很棒的选择！</b>AI做初筛，老师最终把关。效率和质量都有了保障。这是现实中很多学校采用的方法！'
+      ]
+    },
+    {
+      emoji: '📱',
+      text: '<b>情景2：AI 推荐算法</b><br><br>你设计了一个视频推荐AI，它发现推荐搞笑视频能让人看更久。但一直看搞笑视频，小朋友就看不到科普和教育内容了。<br><br>你会怎么调整？',
+      choices: ['🎯 故意混合推荐：3条搞笑的后面放1条科普', '💰 不管，搞笑视频看得久，平台赚得多', '👨‍👩‍👧 让家长和孩子一起设置推荐偏好'],
+      results: [
+        '✅ <b>聪明的设计！</b>孩子们既开心又能学到东西。很多人在不知不觉中就爱上了科普内容！',
+        '⚠️ <b>短视的选择。</b>虽然平台赚了钱，但孩子们的知识面变窄了。长期来看，这不是一个负责任的AI。',
+        '🌟 <b>很好的方案！</b>让家庭参与进来，既尊重了每个人的选择，又保证了内容的多样性。这就是"负责任AI"的典范！'
+      ]
+    },
+    {
+      emoji: '🏥',
+      text: '<b>情景3：AI 医疗助手</b><br><br>你做了一个AI，能帮医生看X光片找疾病。测试发现它对某种皮肤颜色的病人准确率更低（因为训练数据里这种肤色的照片太少）。<br><br>你会怎么做？',
+      choices: ['📊 收集更多各种肤色的数据，重新训练', '🚀 先发布再说，以后慢慢改', '⚠️ 发布时标明：仅对某些肤色有效'],
+      results: [
+        '✅ <b>正确的做法！</b>虽然花了更多时间，但你的AI对所有病人都公平。这才是医疗AI该有的样子！',
+        '⚠️ <b>这很危险！</b>漏诊或误诊会伤害真实的人。在医疗领域，"差不多就行"是绝对不行的。',
+        '🤔 <b>至少你做了标注。</b>但标注了局限性的系统，可能还是会被误用。最好的方案是收集更多数据，让AI对每个人都公平。'
+      ]
+    }
+  ];
+
+  let currentScene = 0;
+
+  window.theaterChoose = function(choiceIdx){
+    const result = scenes[currentScene].results[choiceIdx];
+    const resultDiv = document.getElementById('theaterResult');
+    const bgColors = ['#E8F5E9', '#FFF3E0', '#E3F2FD'];
+    resultDiv.innerHTML = `<div class="theater-result" style="background:${bgColors[choiceIdx]};">${result}</div>`;
+
+    // 禁用按钮
+    document.querySelectorAll('#theaterChoices .theater-choice').forEach(b => b.disabled = true);
+  };
+
+  window.resetTheater = function(){
+    currentScene = (currentScene + 1) % scenes.length;
+    const scene = scenes[currentScene];
+    document.getElementById('theaterEmoji').textContent = scene.emoji;
+    document.getElementById('theaterText').innerHTML = scene.text;
+    document.getElementById('theaterResult').innerHTML = '';
+
+    const choicesDiv = document.getElementById('theaterChoices');
+    choicesDiv.innerHTML = scene.choices.map((c, i) =>
+      `<button class="theater-choice" onclick="theaterChoose(${i})">${c}</button>`
+    ).join('');
+  };
+})();
+
+// ==================== 滚动动画 ====================
+(function scrollAnim(){
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.course-card, .about-card').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(30px)';
+    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    observer.observe(el);
+  });
+
+  // 初始可见的立即显示
+  setTimeout(() => {
+    document.querySelectorAll('.course-card, .about-card').forEach(el => {
+      const rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight) {
+        el.style.opacity = '1';
+        el.style.transform = 'translateY(0)';
+      }
+    });
+  }, 200);
+})();
+
+console.log('🌟 欢迎来到 AI启蒙乐园！');
+console.log('📚 试试导航栏的各个板块');
+console.log('🧪 "玩一玩"里有三个互动实验等你来体验');
+console.log('🛡️ 我们倡导安全、负责任地使用 AI');
+</script>
+
+</body>
+</html>

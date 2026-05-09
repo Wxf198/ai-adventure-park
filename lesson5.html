@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第五课：AI也会犯错—— AI启蒙乐园</title>
+<link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --c-yellow:#FFD93D;--c-yellow-bg:#FFF8DC;--c-pink:#FF8FA3;--c-pink-bg:#FFF0F3;
+    --c-blue:#6CB4F5;--c-blue-bg:#EEF6FF;--c-green:#6BCB77;--c-green-bg:#EDF7EE;
+    --c-purple:#B39DDB;--c-orange:#FFB74D;--c-red:#FF6B6B;--c-red-bg:#FFEEEE;
+    --bg:#FFFDF7;--text:#4A3728;--text2:#8B7355;--text3:#B8A99A;
+    --card:#FFF;--border:#EDE8E0;--shadow:0 4px 20px rgba(0,0,0,0.04);
+    --font-title:'ZCOOL KuaiLe','Noto Sans SC',cursive;--font-body:'Noto Sans SC','Microsoft YaHei',sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth;font-size:16px}
+  body{font-family:var(--font-body);background:var(--bg);color:var(--text);line-height:1.75}
+  .bg-layer{position:fixed;inset:0;pointer-events:none;z-index:0}
+  .bg-blob{position:absolute;border-radius:50%;filter:blur(90px);opacity:.45}
+  .bg-blob:nth-child(1){width:450px;height:450px;background:var(--c-blue-bg);top:-100px;right:-100px}
+  .bg-blob:nth-child(2){width:380px;height:380px;background:var(--c-pink-bg);bottom:-80px;left:-80px}
+  .topnav{position:sticky;top:0;z-index:100;background:rgba(255,253,247,.9);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 20px}
+  .topnav-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:58px}
+  .topnav-back{text-decoration:none;color:var(--text2);font-weight:500;font-size:.93em}
+  .topnav-title{font-family:var(--font-title);font-size:1.15em}
+  .music-btn{width:40px;height:40px;border-radius:50%;border:2px solid var(--border);background:#fff;font-size:1.1em;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center}
+  .music-btn.on{border-color:var(--c-green);background:var(--c-green-bg)}
+  .lesson-progress{position:sticky;top:58px;z-index:99;background:rgba(255,253,247,.85);backdrop-filter:blur(8px);padding:8px 0;border-bottom:1px solid var(--border)}
+  .progress-inner{max-width:900px;margin:0 auto;padding:0 24px;display:flex;align-items:center;gap:12px}
+  .progress-bar{flex:1;height:6px;background:#EDE8E0;border-radius:3px;overflow:hidden}
+  .progress-fill{height:100%;background:linear-gradient(90deg,var(--c-blue),var(--c-pink),var(--c-red));border-radius:3px;transition:width .5s}
+  .progress-text{font-size:.82em;color:var(--text3)}
+  .container{max-width:900px;margin:0 auto;padding:0 24px;position:relative;z-index:1}
+  section{padding:48px 0}
+  .sec-label{display:inline-block;padding:5px 16px;border-radius:50px;font-size:.82em;font-weight:600;margin-bottom:12px}
+  .sec-title{font-family:var(--font-title);font-size:2em;margin-bottom:10px}
+  .sec-sub{color:var(--text2);font-size:1.05em;margin-bottom:28px}
+  .card{background:var(--card);border-radius:22px;box-shadow:var(--shadow);padding:28px 30px;margin-bottom:20px}
+  .card h3{font-family:var(--font-title);font-size:1.25em;margin-bottom:8px}
+  .card p,.card li{color:var(--text2);margin-bottom:6px}
+  .card ul{padding-left:20px;margin:8px 0}
+  .info-box{border-radius:16px;padding:16px 20px;margin:16px 0;font-size:.95em}
+  .info-box.tip{background:var(--c-yellow-bg);border:1px solid rgba(255,217,61,.3)}
+  .info-box.fact{background:var(--c-blue-bg);border:1px solid rgba(108,180,245,.3)}
+  .info-box.warn{background:var(--c-red-bg);border:1px solid rgba(255,107,107,.2)}
+  .info-box.good{background:var(--c-green-bg);border:1px solid rgba(107,203,119,.3)}
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  @media(max-width:680px){.two-col{grid-template-columns:1fr}}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 28px;border-radius:50px;font-size:1em;font-weight:600;font-family:var(--font-body);cursor:pointer;transition:all .3s;border:none;text-decoration:none}
+  .btn:active{transform:scale(.96)}
+  .btn-primary{background:var(--c-yellow);color:var(--text)}.btn-primary:hover{transform:translateY(-2px)}
+  .btn-blue{background:var(--c-blue);color:#fff}.btn-blue:hover{transform:translateY(-2px)}
+  .btn-outline{background:#fff;color:var(--text);border:2px solid var(--border)}.btn-outline:hover{border-color:var(--c-blue)}
+  .btn-lg{padding:15px 36px;font-size:1.1em}
+  .btn-sm{padding:8px 18px;font-size:.88em}
+  .bias-demo{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+  @media(max-width:600px){.bias-demo{grid-template-columns:1fr}}
+  .bias-col{background:#fff;border-radius:16px;padding:16px;text-align:center;box-shadow:var(--shadow)}
+  .bias-col h4{font-family:var(--font-title);margin-bottom:8px}
+  .bias-col canvas{max-width:100%;border-radius:12px;border:2px solid var(--border)}
+  .ethics-card{background:#fff;border-radius:16px;padding:20px;text-align:center;cursor:pointer;transition:all .3s;border:2px solid transparent}
+  .ethics-card:hover{border-color:var(--c-purple);transform:translateY(-2px)}
+  .ethics-card .scene-emoji{font-size:3em}
+  .footer{text-align:center;padding:36px 20px;color:var(--text3);font-size:.88em;border-top:1px solid var(--border);margin-top:32px}
+  .overlay{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.5);align-items:center;justify-content:center}
+  .overlay.show{display:flex}
+  .overlay-card{background:#fff;border-radius:24px;padding:36px;text-align:center;max-width:420px;width:90%}
+  @media(max-width:600px){.sec-title{font-size:1.5em}.card{padding:20px 16px}}
+</style>
+</head>
+<body>
+<div class="bg-layer"><div class="bg-blob"></div><div class="bg-blob"></div></div>
+
+<nav class="topnav">
+  <div class="topnav-inner">
+    <a href="index.html" class="topnav-back">← 返回大厅</a>
+    <span class="topnav-title">🔍 第五课：AI 也会犯错</span>
+    <button class="music-btn" id="musicBtn">🎵</button>
+  </div>
+</nav>
+
+<div class="lesson-progress">
+  <div class="progress-inner"><span>📖 学习进度</span><div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div><span class="progress-text" id="progressText">0/4</span></div>
+</div>
+
+<main class="container">
+
+  <section style="text-align:center;padding-top:60px">
+    <div style="font-size:90px;animation:heroFloat 3s ease-in-out infinite;display:inline-block">🔍</div>
+    <h1 class="sec-title" style="font-size:2.6em">AI 也会犯错！</h1>
+    <p class="sec-sub">了解 AI 的局限——偏见、盲区和为什么人类监督很重要</p>
+    <style>@keyframes heroFloat{0%,100%{transform:translateY(0) rotate(-3deg)} 50%{transform:translateY(-18px) rotate(3deg)}}</style>
+  </section>
+
+  <section id="sec1">
+    <span class="sec-label" style="background:var(--c-blue-bg);color:#1565C0">📖 知识</span>
+    <h2 class="sec-title">一、AI 不是万能的</h2>
+    <div class="card">
+      <h3>😅 AI 的四个"小毛病"</h3>
+      <table style="width:100%;border-collapse:collapse;font-size:.93em">
+        <tr style="border-bottom:1px solid var(--border)"><td style="padding:12px 8px;font-size:1.5em">😅</td><td style="padding:12px 8px"><b>只会学，不会想</b></td><td style="padding:12px 8px;color:var(--text2)">AI 不懂什么是"开心"或"难过"，它只是在数据中找规律并模仿</td></tr>
+        <tr style="border-bottom:1px solid var(--border)"><td style="padding:12px 8px;font-size:1.5em">📊</td><td style="padding:12px 8px"><b>依赖数据质量</b></td><td style="padding:12px 8px;color:var(--text2)">训练数据有错 → AI 学到错的。（垃圾进 = 垃圾出）</td></tr>
+        <tr style="border-bottom:1px solid var(--border)"><td style="padding:12px 8px;font-size:1.5em">🎭</td><td style="padding:12px 8px"><b>可能有偏见</b></td><td style="padding:12px 8px;color:var(--text2)">如果只给AI看某类数据，它就会对没见过的类型判断失误</td></tr>
+        <tr><td style="padding:12px 8px;font-size:1.5em">🔋</td><td style="padding:12px 8px"><b>非常费电</b></td><td style="padding:12px 8px;color:var(--text2)">训练一个大AI用的电，够普通家庭用上百年</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <section id="sec2">
+    <span class="sec-label" style="background:var(--c-red-bg);color:#D32F2F">⚡ 实验</span>
+    <h2 class="sec-title">二、偏见实验——亲眼看看</h2>
+    <p class="sec-sub">同样的算法，不同的训练数据 → 完全不同的结果</p>
+
+    <div class="bias-demo">
+      <div class="bias-col">
+        <h4 style="color:var(--c-green)">✅ 公平训练</h4>
+        <canvas id="fairCanvas" width="280" height="200"></canvas>
+        <p style="font-size:.85em;color:var(--text2);margin-top:8px">猫🐱和狗🐕的数据<b>各占一半</b></p>
+        <button class="btn btn-blue btn-sm" onclick="runFair()">📚 用平衡数据训练</button>
+        <div id="fairMsg" style="font-size:.82em;margin-top:6px;color:var(--text3)"></div>
+      </div>
+      <div class="bias-col">
+        <h4 style="color:var(--c-red)">⚠️ 偏见训练</h4>
+        <canvas id="biasCanvas" width="280" height="200"></canvas>
+        <p style="font-size:.85em;color:var(--text2);margin-top:8px">只给AI看<b>橘色的猫</b>🐱</p>
+        <button class="btn btn-outline btn-sm" onclick="runBias()" style="border-color:var(--c-red)">⚠️ 只用橘猫数据训练</button>
+        <div id="biasMsg" style="font-size:.82em;margin-top:6px;color:var(--text3)"></div>
+      </div>
+    </div>
+
+    <div class="info-box warn" id="biasConclusion" style="display:none">
+      🚨 <b>看到了吗？</b>偏见训练的 AI 把所有不是橘色的动物都判错了！<br>
+      现实中如果这样训练 AI——比如人脸识别只训练了某种肤色——会对其他人造成严重不公平。
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <h3>📰 真实世界的 AI 偏见案例</h3>
+      <ul>
+        <li>🔍 某招聘 AI 因为历史数据中男性工程师更多，学会了<b>歧视女性求职者</b></li>
+        <li>👁️ 某人脸识别系统对深色皮肤的错误率是浅色皮肤的 <b>10 倍</b></li>
+        <li>📱 某手机的人脸解锁被<b>双胞胎</b>互相解锁了</li>
+      </ul>
+      <div class="info-box fact">💡 <b>教训：</b>AI 好不好，取决于<b>训练数据</b>和<b>设计者</b>。这也是为什么学 AI 的同时要学 AI 伦理——确保 AI 对每个人都公平。</div>
+    </div>
+  </section>
+
+  <section id="sec3">
+    <span class="sec-label" style="background:var(--c-purple-bg);color:#6A1B9A">🎭 伦理</span>
+    <h2 class="sec-title">三、AI 伦理小剧场</h2>
+    <p class="sec-sub">遇到这些情况，你会怎么做？</p>
+
+    <div class="card" style="text-align:center">
+      <h3 id="sceneTitle">情景1：AI 在学校</h3>
+      <div style="font-size:3em" id="sceneEmoji">🏫</div>
+      <p style="max-width:500px;margin:12px auto" id="sceneText">学校引入了一个 AI 系统自动批改作文。但它会给写得很有创意但不按套路的作文打低分。你作为设计者会怎么做？</p>
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:12px 0" id="sceneChoices">
+        <button class="btn btn-blue btn-sm" onclick="ethicChoose(0)">🔧 改进AI，让它也欣赏创意</button>
+        <button class="btn btn-outline btn-sm" onclick="ethicChoose(1)">📋 坚持只用AI打分</button>
+        <button class="btn btn-outline btn-sm" onclick="ethicChoose(2)">🤝 AI初筛+老师复核</button>
+      </div>
+      <div id="sceneResult" style="min-height:40px;margin-top:8px;font-weight:500"></div>
+      <button class="btn btn-outline btn-sm" onclick="nextScene()" style="margin-top:12px">🔄 下一个情景</button>
+    </div>
+  </section>
+
+  <section id="sec4">
+    <span class="sec-label" style="background:var(--c-yellow-bg);color:#B8860B">🏆 测验</span>
+    <h2 class="sec-title">四、知识测验</h2>
+    <div class="card">
+      <div class="quiz-q"><div class="q-text" style="font-weight:600;margin-bottom:8px">1. AI 产生偏见的主要原因是什么？</div>
+        <div class="quiz-opts" style="display:flex;flex-direction:column;gap:8px">
+          <div class="quiz-opt" style="padding:10px 16px;background:#fff;border:2px solid var(--border);border-radius:12px;cursor:pointer" onclick="answerQ(0,0,this)">A. AI 太聪明了</div>
+          <div class="quiz-opt" style="padding:10px 16px;background:#fff;border:2px solid var(--border);border-radius:12px;cursor:pointer" onclick="answerQ(0,1,this)">B. 训练数据中存在偏见</div>
+          <div class="quiz-opt" style="padding:10px 16px;background:#fff;border:2px solid var(--border);border-radius:12px;cursor:pointer" onclick="answerQ(0,2,this)">C. AI 有感情</div>
+        </div>
+      </div>
+      <div class="quiz-q"><div class="q-text" style="font-weight:600;margin-bottom:8px">2. "垃圾进=垃圾出"在AI中是什么意思？</div>
+        <div class="quiz-opts" style="display:flex;flex-direction:column;gap:8px">
+          <div class="quiz-opt" style="padding:10px 16px;background:#fff;border:2px solid var(--border);border-radius:12px;cursor:pointer" onclick="answerQ(1,0,this)">A. AI 会清理数据</div>
+          <div class="quiz-opt" style="padding:10px 16px;background:#fff;border:2px solid var(--border);border-radius:12px;cursor:pointer" onclick="answerQ(1,1,this)">B. 用错误数据训练，就会得到错误结果</div>
+          <div class="quiz-opt" style="padding:10px 16px;background:#fff;border:2px solid var(--border);border-radius:12px;cursor:pointer" onclick="answerQ(1,2,this)">C. AI 需要倒垃圾</div>
+        </div>
+      </div>
+      <div class="quiz-q"><div class="q-text" style="font-weight:600;margin-bottom:8px">3. 怎样才能减少 AI 的偏见？</div>
+        <div class="quiz-opts" style="display:flex;flex-direction:column;gap:8px">
+          <div class="quiz-opt" style="padding:10px 16px;background:#fff;border:2px solid var(--border);border-radius:12px;cursor:pointer" onclick="answerQ(2,0,this)">A. 用多样、平衡的数据训练</div>
+          <div class="quiz-opt" style="padding:10px 16px;background:#fff;border:2px solid var(--border);border-radius:12px;cursor:pointer" onclick="answerQ(2,1,this)">B. 不用任何数据</div>
+          <div class="quiz-opt" style="padding:10px 16px;background:#fff;border:2px solid var(--border);border-radius:12px;cursor:pointer" onclick="answerQ(2,2,this)">C. 让AI自己决定</div>
+        </div>
+      </div>
+      <div id="quizResult" style="text-align:center;margin-top:12px;font-size:1.1em"></div>
+    </div>
+  </section>
+
+  <div style="text-align:center;padding:20px 0 60px">
+    <button class="btn btn-blue btn-lg" onclick="completeLesson()">🎉 完成本课！点亮徽章</button>
+  </div>
+</main>
+
+<div class="footer">
+  <p>🤖 AI启蒙乐园 · 第五课 · <a href="index.html" style="color:var(--text2)">返回大厅</a> · <a href="lesson6.html" style="color:var(--text2)">下一课 →</a></p>
+</div>
+
+<div class="overlay" id="completeOverlay">
+  <div class="overlay-card">
+    <div style="font-size:4em">🏅</div>
+    <h2 style="font-family:var(--font-title)">完成第五课！</h2>
+    <p style="color:var(--text2)">你已了解 AI 的局限和公平性的重要性！</p>
+    <div style="display:flex;gap:10px;justify-content:center;margin-top:12px">
+      <a href="index.html" class="btn btn-outline">🏠 大厅</a>
+      <a href="lesson6.html" class="btn btn-blue">📝 第六课 →</a>
+    </div>
+  </div>
+</div>
+
+<script>
+// 音乐
+(function(){const btn=document.getElementById('musicBtn');let ctx=null,playing=false,timer=null;const mp3=new Audio();mp3.loop=true;mp3.volume=.25;let ml=false;mp3.src='audio/bgm-lesson.mp3';mp3.addEventListener('canplaythrough',()=>{ml=true});mp3.addEventListener('error',()=>{ml=false});const mel=[262,294,330,349,330,294,262,294,330,349,392,349,330,294,262,294,330,392,440,392,349,330,294,330,262,294,330,262,294,330,349,330];function pn(i){if(!playing||!ctx)return;const o=ctx.createOscillator(),g=ctx.createGain();o.type='sine';o.frequency.value=mel[i%mel.length];g.gain.setValueAtTime(.035,ctx.currentTime);g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+.32);o.connect(g);g.connect(ctx.destination);o.start();o.stop(ctx.currentTime+.35);timer=setTimeout(()=>pn(i+1),320)}btn.addEventListener('click',()=>{if(!ctx)ctx=new(window.AudioContext||window.webkitAudioContext)();if(playing){playing=false;ml?mp3.pause():clearTimeout(timer);btn.classList.remove('on');btn.textContent='🎵'}else{playing=true;btn.classList.add('on');btn.textContent='🎶';if(ml)mp3.play().catch(()=>{ml=false;pn(0)});else pn(0)}})})();
+
+// 偏见实验
+var fairData=[],biasData=[];
+function drawBiasCanvas(id,data,testNote){
+  const cv=document.getElementById(id),ctx=cv.getContext('2d');ctx.clearRect(0,0,cv.width,cv.height);
+  ctx.strokeStyle='rgba(0,0,0,.04)';for(let i=0;i<cv.width;i+=18){ctx.beginPath();ctx.moveTo(i,0);ctx.lineTo(i,cv.height);ctx.stroke()}for(let i=0;i<cv.height;i+=18){ctx.beginPath();ctx.moveTo(0,i);ctx.lineTo(cv.width,i);ctx.stroke()}
+  data.forEach(d=>{ctx.fillStyle=d.color;ctx.beginPath();ctx.arc(d.x,d.y,6,0,Math.PI*2);ctx.fill();ctx.fillStyle='#fff';ctx.font='9px sans-serif';ctx.textAlign='center';ctx.fillText(d.label,d.x,d.y+3)})
+  if(testNote){ctx.fillStyle='#333';ctx.font='32px sans-serif';ctx.textAlign='center';ctx.fillText('❓',cv.width*0.78,cv.height*0.4);ctx.fillStyle='#888';ctx.font='10px "Noto Sans SC"';ctx.fillText(testNote,cv.width*0.78,cv.height*0.65)}
+}
+function runFair(){fairData=[];const colors=['#FF6B6B','#FF6B6B','#FF6B6B','#FF6B6B','#4D96FF','#4D96FF','#4D96FF','#4D96FF'];const cv=document.getElementById('fairCanvas');for(let i=0;i<8;i++){fairData.push({x:20+Math.random()*(cv.width-40),y:15+Math.random()*(cv.height-30),color:colors[i],label:i<4?'猫':'狗'})}drawBiasCanvas('fairCanvas',fairData,'这是一只狗?');document.getElementById('fairMsg').innerHTML='✅ <b>公平训练：</b>右侧测试点 AI <b style="color:var(--c-green)">能正确判断</b>为狗';checkDone()}
+function runBias(){biasData=[];const cv=document.getElementById('biasCanvas');for(let i=0;i<8;i++){biasData.push({x:20+Math.random()*(cv.width-40),y:15+Math.random()*(cv.height-30),color:'#FF8C42',label:'猫'})}drawBiasCanvas('biasCanvas',biasData,'这是一只蓝色的?');document.getElementById('biasMsg').innerHTML='⚠️ <b>偏见训练：</b>测试点是蓝色狗🐕，但AI只见过橘猫 → <b style="color:var(--c-red)">会分错</b>';checkDone()}
+function checkDone(){if(fairData.length>0&&biasData.length>0){document.getElementById('biasConclusion').style.display='block'}}
+// 初始化
+(function initBias(){const fc=document.getElementById('fairCanvas'),bc=document.getElementById('biasCanvas');[fc,bc].forEach(cv=>{const ctx=cv.getContext('2d');ctx.fillStyle='#ccc';ctx.font='13px "Noto Sans SC"';ctx.textAlign='center';ctx.fillText('点击下方按钮开始',cv.width/2,cv.height/2)})})();
+
+// 伦理小剧场
+var sceneIdx=0;
+var scenes=[{
+  emoji:'🏫',title:'情景1：AI 在学校',
+  text:'学校引入了一个 AI 系统自动批改作文。但它会给写得很有创意但不按套路的作文打低分。你作为设计者会怎么做？',
+  choices:['🔧 改进AI，让它也欣赏创意','📋 坚持只用AI打分','🤝 AI初筛+老师复核'],
+  results:['✅ <b>好选择！</b>改进AI让每个孩子的创意都被看见！','⚠️ 效率虽高，但有创意的小朋友被埋没了。','🌟 <b>最佳方案！</b>AI+人类合作，兼顾效率和质量。']
+},{
+  emoji:'📱',title:'情景2：AI 推荐视频',
+  text:'你设计的视频推荐AI发现：推荐搞笑视频让人看得更久。但一直看搞笑视频，小朋友就看不到科普内容了。你怎么办？',
+  choices:['🎯 混合推荐：3条搞笑+1条科普','💰 不管，搞笑视频数据好','👨‍👩‍👧 让家长和孩子一起设偏好'],
+  results:['✅ <b>聪明的做法！</b>孩子们开心又能学到东西。','⚠️ 短视！长期看孩子们的知识面变窄了。','🌟 <b>最负责任的方案！</b>家庭参与，各取所需。']
+},{
+  emoji:'🏥',title:'情景3：AI 医疗助手',
+  text:'你做的医疗AI对某种肤色病人的准确率更低（训练数据中这种肤色照片太少）。你会怎么做？',
+  choices:['📊 收集更多多样数据重新训练','🚀 先发布再说，以后慢慢改','⚠️ 发布但标明局限性'],
+  results:['✅ <b>正确的做法！</b>虽然花时间，但AI对每个人都公平。','⚠️ <b>危险！</b>漏诊会伤害真实的人。','🤔 至少标注了，但仍可能被误用。最好重新训练。']
+}];
+function nextScene(){sceneIdx=(sceneIdx+1)%scenes.length;const s=scenes[sceneIdx];document.getElementById('sceneEmoji').textContent=s.emoji;document.getElementById('sceneTitle').textContent=s.title;document.getElementById('sceneText').textContent=s.text;const choices=document.getElementById('sceneChoices');choices.innerHTML=s.choices.map((c,i)=>`<button class="btn ${i===0?'btn-blue btn-sm':'btn-outline btn-sm'}" onclick="ethicChoose(${i})">${c}</button>`).join('');document.getElementById('sceneResult').innerHTML=''}
+function ethicChoose(i){const r=scenes[sceneIdx].results[i];const bg=['#E8F5E9','#FFF3E0','#E3F2FD'];document.getElementById('sceneResult').innerHTML=`<div style="background:${bg[i]};border-radius:12px;padding:12px 16px;margin-top:8px">${r}</div>`}
+
+// 测验
+var qAns=[1,1,0],qDone={},qScore=0;
+function answerQ(q,opt,el){if(qDone[q]!==undefined)return;qDone[q]=opt;const all=el.closest('.quiz-q').querySelectorAll('.quiz-opt');all.forEach(o=>o.style.pointerEvents='none');if(opt===qAns[q]){el.style.borderColor='var(--c-green)';el.style.background='var(--c-green-bg)';qScore++}else{el.style.borderColor='var(--c-red)';el.style.background='var(--c-red-bg)';all[qAns[q]].style.borderColor='var(--c-green)';all[qAns[q]].style.background='var(--c-green-bg)'}if(Object.keys(qDone).length===3){const r=document.getElementById('quizResult');r.innerHTML=qScore===3?'🏆 <b style="color:var(--c-green)">全部正确！</b>':`📊 答对 ${qScore}/3 题`}}
+
+function completeLesson(){const p=JSON.parse(localStorage.getItem('ai_lessons_done')||'[]');if(!p.includes(5))p.push(5);localStorage.setItem('ai_lessons_done',JSON.stringify(p));document.getElementById('completeOverlay').classList.add('show')}
+document.getElementById('completeOverlay').addEventListener('click',function(e){if(e.target===this)this.classList.remove('show')});
+
+window.addEventListener('scroll',()=>{const secs=document.querySelectorAll('section');let n=0;secs.forEach((s,i)=>{if(s.getBoundingClientRect().top<window.innerHeight*.7)n=i+1});document.getElementById('progressFill').style.width=Math.round(n/secs.length*100)+'%';document.getElementById('progressText').textContent=n+'/'+secs.length})
+</script>
+</body>
+</html>

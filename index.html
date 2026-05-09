@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI启蒙乐园 — 小朋友的人工智能第一课</title>
+<meta name="description" content="专为8-14岁儿童设计的AI互动教程，6堂趣味课程 + 动手实验">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --c-yellow: #FFD93D;   --c-yellow-bg: #FFF8DC;
+    --c-pink: #FF8FA3;     --c-pink-bg: #FFF0F3;
+    --c-blue: #6CB4F5;     --c-blue-bg: #EEF6FF;
+    --c-green: #6BCB77;    --c-green-bg: #EDF7EE;
+    --c-purple: #B39DDB;   --c-purple-bg: #F5F0FA;
+    --c-orange: #FFB74D;   --c-orange-bg: #FFF6EB;
+    --c-red: #FF6B6B;
+    --bg: #FFFDF7;         --bg2: #FFF9F0;
+    --text: #4A3728;       --text2: #8B7355;      --text3: #B8A99A;
+    --card: #FFFFFF;       --border: #EDE8E0;
+    --shadow: 0 4px 24px rgba(0,0,0,0.05);
+    --shadow-lg: 0 16px 48px rgba(0,0,0,0.08);
+    --radius: 22px;
+    --font-title: 'ZCOOL KuaiLe', 'Noto Sans SC', cursive;
+    --font-body: 'Noto Sans SC', 'Microsoft YaHei', sans-serif;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; font-size:16px; }
+  body { font-family:var(--font-body); background:var(--bg); color:var(--text); line-height:1.7; overflow-x:hidden; }
+
+  /* 背景装饰 */
+  .bg-layer { position:fixed; inset:0; pointer-events:none; z-index:0; }
+  .bg-blob { position:absolute; border-radius:50%; filter:blur(100px); opacity:0.5; }
+  .bg-blob:nth-child(1){ width:500px; height:500px; background:var(--c-yellow-bg); top:-150px; left:-150px; }
+  .bg-blob:nth-child(2){ width:400px; height:400px; background:var(--c-pink-bg); top:30%; right:-120px; }
+  .bg-blob:nth-child(3){ width:350px; height:350px; background:var(--c-blue-bg); bottom:10%; left:25%; }
+
+  /* 导航 */
+  .nav { position:sticky; top:0; z-index:100; background:rgba(255,253,247,0.88); backdrop-filter:blur(16px); border-bottom:1px solid var(--border); }
+  .nav-inner { max-width:1160px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; height:62px; padding:0 24px; }
+  .nav-logo { font-family:var(--font-title); font-size:1.4em; color:var(--text); text-decoration:none; display:flex; align-items:center; gap:8px; }
+  .nav-links { display:flex; gap:4px; list-style:none; align-items:center; }
+  .nav-links a { text-decoration:none; color:var(--text2); padding:8px 18px; border-radius:50px; font-size:0.93em; font-weight:500; transition:all .3s; }
+  .nav-links a:hover { background:var(--c-yellow-bg); color:var(--text); }
+  .nav-music { width:42px; height:42px; border-radius:50%; border:2px solid var(--border); background:#fff; font-size:1.2em; cursor:pointer; transition:all .3s; display:flex; align-items:center; justify-content:center; margin-left:12px; }
+  .nav-music:hover { border-color:var(--c-yellow); background:var(--c-yellow-bg); }
+  .nav-music.on { border-color:var(--c-green); background:var(--c-green-bg); }
+  .nav-hamburger { display:none; background:none; border:none; font-size:1.5em; cursor:pointer; }
+
+  /* 容器 */
+  .container { max-width:1160px; margin:0 auto; padding:0 24px; position:relative; z-index:1; }
+  section { padding:72px 0; }
+
+  /* Hero */
+  .hero { text-align:center; padding:72px 24px 48px; position:relative; z-index:1; }
+  .hero-bot { font-size:110px; display:inline-block; animation:heroFloat 3s ease-in-out infinite; }
+  @keyframes heroFloat { 0%,100%{transform:translateY(0) rotate(-3deg)} 50%{transform:translateY(-22px) rotate(3deg)} }
+  .hero h1 { font-family:var(--font-title); font-size:clamp(2em,5vw,3.4em); background:linear-gradient(135deg,var(--c-pink),var(--c-orange),var(--c-green),var(--c-blue)); background-size:300% 300%; -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; animation:heroGrad 6s ease infinite; margin:12px 0; }
+  @keyframes heroGrad { 0%,100%{background-position:0% 50%} 50%{background-position:100% 50%} }
+  .hero p { font-size:1.15em; color:var(--text2); max-width:560px; margin:0 auto 28px; }
+  .hero-stats { display:flex; gap:20px; justify-content:center; flex-wrap:wrap; margin-top:8px; }
+  .hero-stat { background:var(--card); border-radius:18px; padding:18px 24px; box-shadow:var(--shadow); text-align:center; min-width:100px; }
+  .hero-stat .num { font-family:var(--font-title); font-size:2em; color:var(--c-orange); }
+  .hero-stat .lbl { font-size:0.85em; color:var(--text3); }
+
+  /* 按钮 */
+  .btn { display:inline-flex; align-items:center; gap:8px; padding:14px 32px; border-radius:50px; font-size:1.02em; font-weight:600; font-family:var(--font-body); text-decoration:none; cursor:pointer; transition:all .3s; border:none; }
+  .btn-primary { background:var(--c-yellow); color:var(--text); box-shadow:0 4px 18px rgba(255,217,61,0.45); }
+  .btn-primary:hover { transform:translateY(-2px); box-shadow:0 8px 28px rgba(255,217,61,0.55); }
+  .btn-outline { background:#fff; color:var(--text); border:2px solid var(--border); }
+  .btn-outline:hover { border-color:var(--c-yellow); background:var(--c-yellow-bg); }
+  .btn-sm { padding:8px 20px; font-size:0.9em; }
+  .btn-lg { padding:16px 38px; font-size:1.12em; }
+  .btn:active { transform:scale(0.96); }
+
+  /* 章节标题 */
+  .sec-title { font-family:var(--font-title); font-size:2.1em; text-align:center; margin-bottom:12px; }
+  .sec-sub { text-align:center; color:var(--text2); font-size:1.05em; margin-bottom:44px; }
+
+  /* 课程网格 */
+  .course-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(340px, 1fr)); gap:24px; }
+  .course-card { background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; transition:all .35s; display:flex; flex-direction:column; border:2px solid transparent; cursor:pointer; text-decoration:none; color:inherit; }
+  .course-card:hover { transform:translateY(-6px); box-shadow:var(--shadow-lg); border-color:var(--c-yellow); }
+  .course-card-header { padding:28px 24px 0; text-align:center; }
+  .course-card-header .emoji { font-size:3.2em; }
+  .course-card-header .tag { display:inline-block; padding:4px 14px; border-radius:50px; font-size:0.78em; font-weight:600; margin-bottom:6px; }
+  .course-card-body { padding:16px 24px 20px; flex:1; }
+  .course-card-body h3 { font-family:var(--font-title); font-size:1.2em; margin-bottom:8px; }
+  .course-card-body p { color:var(--text2); font-size:0.9em; line-height:1.7; }
+  .course-card-footer { padding:14px 24px; border-top:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; font-size:0.84em; color:var(--text3); }
+  .course-card-footer .interact { padding:4px 12px; border-radius:50px; font-weight:500; font-size:0.85em; }
+
+  /* 学习路径 */
+  .path-container { position:relative; max-width:800px; margin:0 auto; }
+  .path-line { position:absolute; left:31px; top:0; bottom:0; width:4px; background:linear-gradient(to bottom, var(--c-pink), var(--c-orange), var(--c-yellow), var(--c-green), var(--c-blue), var(--c-purple)); border-radius:2px; }
+  .path-item { display:flex; gap:20px; align-items:flex-start; margin-bottom:28px; position:relative; }
+  .path-num { flex-shrink:0; width:66px; height:66px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:var(--font-title); font-size:1.5em; color:#fff; z-index:1; }
+  .path-content { background:var(--card); border-radius:16px; padding:20px 24px; box-shadow:var(--shadow); flex:1; }
+  .path-content h4 { font-family:var(--font-title); margin-bottom:4px; }
+  .path-content p { color:var(--text2); font-size:0.9em; }
+
+  /* 页脚 */
+  .footer { background:#4A3728; color:#C4B5A8; padding:48px 24px 32px; position:relative; z-index:1; }
+  .footer-inner { max-width:1160px; margin:0 auto; display:grid; grid-template-columns:repeat(auto-fit, minmax(200px,1fr)); gap:32px; }
+  .footer h4 { font-family:var(--font-title); color:#fff; font-size:1.05em; margin-bottom:10px; }
+  .footer a, .footer p { font-size:0.9em; color:#B8A99A; text-decoration:none; line-height:2.2; }
+  .footer a:hover { color:var(--c-yellow); }
+  .footer-bottom { max-width:1160px; margin:28px auto 0; padding-top:22px; border-top:1px solid rgba(255,255,255,0.1); text-align:center; font-size:0.82em; color:#8B7B6B; }
+
+  @media (max-width:768px) {
+    .nav-links { display:none; }
+    .nav-links.open { display:flex; flex-direction:column; position:absolute; top:62px; left:0; right:0; background:rgba(255,253,247,0.97); padding:16px; gap:6px; border-bottom:1px solid var(--border); }
+    .nav-hamburger { display:block; }
+    .course-grid { grid-template-columns:1fr; }
+    .hero-bot { font-size:72px; }
+    section { padding:48px 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-layer">
+  <div class="bg-blob"></div><div class="bg-blob"></div><div class="bg-blob"></div>
+</div>
+
+<!-- 导航 -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">🤖 AI启蒙乐园</a>
+    <button class="nav-hamburger" id="hamburger" aria-label="菜单">☰</button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about">📖 关于</a></li>
+      <li><a href="#courses">📚 课程</a></li>
+      <li><a href="#path">🗺️ 学习路径</a></li>
+      <li><a href="lesson1.html">🚀 开始上课</a></li>
+    </ul>
+    <button class="nav-music" id="musicBtn" title="背景音乐">🎵</button>
+  </div>
+</nav>
+
+<!-- Hero -->
+<header class="hero">
+  <div class="hero-bot">🤖</div>
+  <h1>小朋友的 AI 启蒙第一课</h1>
+  <p>像读绘本一样学 AI！通过故事、游戏和动手实验，轻松理解人工智能的奇妙世界</p>
+  <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
+    <a href="lesson1.html" class="btn btn-primary btn-lg">🚀 开始第一课</a>
+    <a href="#courses" class="btn btn-outline btn-lg">📚 查看全部课程</a>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="num">6</div><div class="lbl">趣味课程</div></div>
+    <div class="hero-stat"><div class="num">10+</div><div class="lbl">互动实验</div></div>
+    <div class="hero-stat"><div class="num">8-14</div><div class="lbl">适合年龄</div></div>
+    <div class="hero-stat"><div class="num">∞</div><div class="lbl">想象力</div></div>
+  </div>
+</header>
+
+<!-- 关于 -->
+<section id="about">
+  <div class="container">
+    <h2 class="sec-title">✨ AI 是什么？三句话讲清楚</h2>
+    <p class="sec-sub">用小朋友能理解的方式认识人工智能</p>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(250px,1fr)); gap:20px;">
+      <div style="background:var(--card); border-radius:var(--radius); padding:28px 24px; text-align:center; box-shadow:var(--shadow);">
+        <div style="font-size:3em;">🧠</div>
+        <h3 style="font-family:var(--font-title); margin:8px 0;">会学习的程序</h3>
+        <p style="color:var(--text2); font-size:0.92em;">AI 不是真的人，而是一个聪明的电脑程序。你给它看很多例子，它就能自己找到规律，变得越来越聪明。</p>
+      </div>
+      <div style="background:var(--card); border-radius:var(--radius); padding:28px 24px; text-align:center; box-shadow:var(--shadow);">
+        <div style="font-size:3em;">🐶</div>
+        <h3 style="font-family:var(--font-title); margin:8px 0;">像训练小宠物</h3>
+        <p style="color:var(--text2); font-size:0.92em;">教小狗"坐下"需要反复练习，训练 AI 也是一样。这个过程就叫<b>机器学习</b>，AI 领域最重要的概念。</p>
+      </div>
+      <div style="background:var(--card); border-radius:var(--radius); padding:28px 24px; text-align:center; box-shadow:var(--shadow);">
+        <div style="font-size:3em;">🔧</div>
+        <h3 style="font-family:var(--font-title); margin:8px 0;">只是一个工具</h3>
+        <p style="color:var(--text2); font-size:0.92em;">AI 就像锤子🔨、剪刀✂️、画笔🖌️，好不好用取决于拿它的人。学会善用 AI，是每个小朋友的超能力。</p>
+      </div>
+      <div style="background:var(--card); border-radius:var(--radius); padding:28px 24px; text-align:center; box-shadow:var(--shadow);">
+        <div style="font-size:3em;">🌍</div>
+        <h3 style="font-family:var(--font-title); margin:8px 0;">已经无处不在</h3>
+        <p style="color:var(--text2); font-size:0.92em;">手机里的人脸识别、语音助手、视频推荐、导航地图……AI 早已悄悄融入了我们的日常生活！</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 课程 -->
+<section id="courses" style="background:var(--bg2);">
+  <div class="container">
+    <h2 class="sec-title">📚 六堂趣味课程</h2>
+    <p class="sec-sub">每课只需 10 分钟，边玩边学</p>
+    <div class="course-grid">
+
+      <a href="lesson1.html" class="course-card">
+        <div class="course-card-header">
+          <div class="emoji">🐶</div>
+          <span class="tag" style="background:var(--c-pink-bg); color:#D4687C;">第一课</span>
+        </div>
+        <div class="course-card-body">
+          <h3>AI 是什么？——养一只 AI 宠物</h3>
+          <p>把 AI 想象成虚拟宠物小狗。了解 AI 的定义、AI 能做什么、以及最重要的概念——<b>从数据中学习</b>。</p>
+          <p style="margin-top:8px; font-size:0.85em; color:var(--text3);">📖 知识点：人工智能 · 数据 · 训练 · 模型</p>
+        </div>
+        <div class="course-card-footer">
+          <span class="interact" style="background:var(--c-pink-bg); color:#D4687C;">🎯 互动：训练AI宠物 + 宠物进化</span>
+          <span>⏱ 12分钟</span>
+        </div>
+      </a>
+
+      <a href="lesson2.html" class="course-card" style="opacity:0.7;">
+        <div class="course-card-header">
+          <div class="emoji">📝</div>
+          <span class="tag" style="background:var(--c-orange-bg); color:#E67E22;">第二课</span>
+        </div>
+        <div class="course-card-body">
+          <h3>AI 怎么学习？——可视化分类器</h3>
+          <p>像背单词一样，AI 通过大量例子学习。亲手在屏幕上画数据点，看 AI 如何画出分类边界线。</p>
+          <p style="margin-top:8px; font-size:0.85em; color:var(--text3);">📖 知识点：监督学习 · 分类 · 决策边界</p>
+        </div>
+        <div class="course-card-footer">
+          <span class="interact" style="background:var(--c-orange-bg); color:#E67E22;">🎯 互动：画点分类 + 边界线可视化</span>
+          <span style="color:#ccc;">即将上线</span>
+        </div>
+      </a>
+
+      <a href="lesson3.html" class="course-card" style="opacity:0.7;">
+        <div class="course-card-header">
+          <div class="emoji">🧠</div>
+          <span class="tag" style="background:var(--c-yellow-bg); color:#B8860B;">第三课</span>
+        </div>
+        <div class="course-card-body">
+          <h3>神经网络的秘密——AI的"大脑"</h3>
+          <p>了解 AI 如何模仿人脑结构。点击神经元看信号传播，理解输入层→隐藏层→输出层的奥秘。</p>
+          <p style="margin-top:8px; font-size:0.85em; color:var(--text3);">📖 知识点：神经元 · 层级结构 · 前向传播</p>
+        </div>
+        <div class="course-card-footer">
+          <span class="interact" style="background:var(--c-yellow-bg); color:#B8860B;">🎯 互动：搭建神经网络 + 信号传播</span>
+          <span style="color:#ccc;">即将上线</span>
+        </div>
+      </a>
+
+      <a href="lesson4.html" class="course-card" style="opacity:0.7;">
+        <div class="course-card-header">
+          <div class="emoji">🎮</div>
+          <span class="tag" style="background:var(--c-green-bg); color:#2E7D32;">第四课</span>
+        </div>
+        <div class="course-card-body">
+          <h3>AI 训练师挑战——猫狗分类战</h3>
+          <p>体验真实训练过程！给AI看猫和狗的图片，让它从0开始学习。训练越多，猜得越准！</p>
+          <p style="margin-top:8px; font-size:0.85em; color:var(--text3);">📖 知识点：KNN算法 · 特征提取 · 模型准确率</p>
+        </div>
+        <div class="course-card-footer">
+          <span class="interact" style="background:var(--c-green-bg); color:#2E7D32;">🎯 互动：KNN分类游戏 + 准确率追踪</span>
+          <span style="color:#ccc;">即将上线</span>
+        </div>
+      </a>
+
+      <a href="lesson5.html" class="course-card" style="opacity:0.7;">
+        <div class="course-card-header">
+          <div class="emoji">🔍</div>
+          <span class="tag" style="background:var(--c-blue-bg); color:#1565C0;">第五课</span>
+        </div>
+        <div class="course-card-body">
+          <h3>AI 也会犯错——偏见与盲区</h3>
+          <p>AI不是万能的！通过对比实验亲眼看到：数据偏见如何导致AI做出不公平的判断。</p>
+          <p style="margin-top:8px; font-size:0.85em; color:var(--text3);">📖 知识点：数据偏见 · 公平性 · AI伦理</p>
+        </div>
+        <div class="course-card-footer">
+          <span class="interact" style="background:var(--c-blue-bg); color:#1565C0;">🎯 互动：公平vs偏见对比实验</span>
+          <span style="color:#ccc;">即将上线</span>
+        </div>
+      </a>
+
+      <a href="lesson6.html" class="course-card" style="opacity:0.7;">
+        <div class="course-card-header">
+          <div class="emoji">🚀</div>
+          <span class="tag" style="background:var(--c-purple-bg); color:#6A1B9A;">第六课</span>
+        </div>
+        <div class="course-card-body">
+          <h3>设计AI未来——创意与责任</h3>
+          <p>未来的AI能做什么？发挥想象力设计你自己的AI发明！用AI创意画板把想象变成画面。</p>
+          <p style="margin-top:8px; font-size:0.85em; color:var(--text3);">📖 知识点：AI应用场景 · 创意设计 · 社会责任</p>
+        </div>
+        <div class="course-card-footer">
+          <span class="interact" style="background:var(--c-purple-bg); color:#6A1B9A;">🎯 互动：AI创意画板 + 发明记录本</span>
+          <span style="color:#ccc;">即将上线</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- 学习路径 -->
+<section id="path">
+  <div class="container">
+    <h2 class="sec-title">🗺️ 学习路径</h2>
+    <p class="sec-sub">从零基础到 AI 小达人，一步一步来</p>
+    <div class="path-container">
+      <div class="path-line"></div>
+      <div class="path-item">
+        <div class="path-num" style="background:var(--c-pink);">1</div>
+        <div class="path-content">
+          <h4>🐶 认识 AI</h4>
+          <p>了解什么是人工智能，训练你的第一只 AI 宠物小智。它会随着训练越来越聪明！</p>
+        </div>
+      </div>
+      <div class="path-item">
+        <div class="path-num" style="background:var(--c-orange);">2</div>
+        <div class="path-content">
+          <h4>📝 理解学习</h4>
+          <p>亲手操作可视化分类器，理解 AI 如何从数据中找到规律、画出决策边界。</p>
+        </div>
+      </div>
+      <div class="path-item">
+        <div class="path-num" style="background:var(--c-yellow);">3</div>
+        <div class="path-content">
+          <h4>🧠 深入大脑</h4>
+          <p>搭建神经网络，观察信号如何层层传播，理解 AI 的"思考"过程。</p>
+        </div>
+      </div>
+      <div class="path-item">
+        <div class="path-num" style="background:var(--c-green);">4</div>
+        <div class="path-content">
+          <h4>🎮 动手实战</h4>
+          <p>成为 AI 训练师！用 KNN 算法训练模型区分猫和狗，追踪准确率。</p>
+        </div>
+      </div>
+      <div class="path-item">
+        <div class="path-num" style="background:var(--c-blue);">5</div>
+        <div class="path-content">
+          <h4>🔍 发现盲区</h4>
+          <p>通过对比实验认识 AI 的局限性，了解数据偏见和公平性的重要性。</p>
+        </div>
+      </div>
+      <div class="path-item">
+        <div class="path-num" style="background:var(--c-purple);">6</div>
+        <div class="path-content">
+          <h4>🚀 创造未来</h4>
+          <p>发挥想象力设计 AI 发明，用创意画板将想法可视化，成为 AI 小创客！</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 页脚 -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div>
+      <h4>🤖 AI启蒙乐园</h4>
+      <p>专为 8-14 岁儿童设计的<br>人工智能互动启蒙教程</p>
+    </div>
+    <div>
+      <h4>📚 课程</h4>
+      <a href="lesson1.html">第一课：AI是什么</a><br>
+      <a href="lesson2.html">第二课：AI怎么学习</a><br>
+      <a href="lesson3.html">第三课：神经网络</a>
+    </div>
+    <div>
+      <h4>🔗 资源</h4>
+      <a href="https://scratch.mit.edu" target="_blank" rel="noopener">Scratch</a><br>
+      <a href="https://code.org" target="_blank" rel="noopener">Code.org</a><br>
+      <a href="https://quickdraw.withgoogle.com" target="_blank" rel="noopener">Quick, Draw!</a>
+    </div>
+    <div>
+      <h4>📬 联系</h4>
+      <p>📧 hello@aikids.edu</p>
+      <p>🌐 完全免费 · 开源</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>本教程由 Claude（Anthropic AI 助手）协助编写 · 2026年 · 仅供教育用途</p>
+  </div>
+</footer>
+
+<!-- ==================== 音频引擎 ==================== -->
+<script>
+(function audioEngine(){
+  const btn = document.getElementById('musicBtn');
+  let ctx = null, playing = false, timer = null;
+
+  function ensureCtx(){
+    if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+
+  // 简单旋律
+  const melody = [
+    262,330,392,330, 294,349,440,349, 330,392,523,392, 294,349,440,349,
+    330,392,523,392, 349,440,587,440, 392,523,659,523, 330,262,294,330
+  ];
+
+  function playNote(i){
+    if (!playing || !ctx) return;
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    o.type = i % 8 < 4 ? 'sine' : 'triangle';
+    o.frequency.value = melody[i % melody.length];
+    g.gain.setValueAtTime(0.04, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.35);
+    o.connect(g); g.connect(ctx.destination);
+    o.start(); o.stop(ctx.currentTime + 0.38);
+    timer = setTimeout(() => playNote(i+1), 340);
+  }
+
+  btn.addEventListener('click', ()=>{
+    ensureCtx();
+    if (playing){
+      playing = false; clearTimeout(timer);
+      btn.classList.remove('on'); btn.textContent = '🎵';
+    } else {
+      playing = true;
+      btn.classList.add('on'); btn.textContent = '🎶';
+      playNote(0);
+    }
+  });
+})();
+
+// 汉堡菜单
+document.getElementById('hamburger').addEventListener('click', ()=>{
+  document.getElementById('navLinks').classList.toggle('open');
+});
+document.querySelectorAll('#navLinks a').forEach(a=>{
+  a.addEventListener('click', ()=> document.getElementById('navLinks').classList.remove('open'));
+});
+</script>
+
+</body>
+</html>

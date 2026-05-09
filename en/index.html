@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Adventure Park — A Kid's First Guide to Artificial Intelligence</title>
+<meta name="description" content="A playful, interactive AI tutorial for kids aged 8-14. Six fun lessons with hands-on experiments.">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --c-yellow:#FFD93D; --c-yellow-bg:#FFF8DC; --c-pink:#FF8FA3; --c-pink-bg:#FFF0F3;
+    --c-blue:#6CB4F5; --c-blue-bg:#EEF6FF; --c-green:#6BCB77; --c-green-bg:#EDF7EE;
+    --c-purple:#B39DDB; --c-purple-bg:#F5F0FA; --c-orange:#FFB74D; --c-orange-bg:#FFF6EB;
+    --c-red:#FF6B6B;
+    --bg:#FFFDF7; --bg2:#FFF9F0; --text:#4A3728; --text2:#8B7355; --text3:#B8A99A;
+    --card:#FFFFFF; --border:#EDE8E0;
+    --shadow:0 4px 24px rgba(0,0,0,0.05); --shadow-lg:0 16px 48px rgba(0,0,0,0.08);
+    --radius:22px;
+    --font-title:'Fredoka One','Nunito',cursive; --font-body:'Nunito','Segoe UI',sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth;font-size:16px}
+  body{font-family:var(--font-body);background:var(--bg);color:var(--text);line-height:1.7;overflow-x:hidden}
+  .bg-layer{position:fixed;inset:0;pointer-events:none;z-index:0}
+  .bg-blob{position:absolute;border-radius:50%;filter:blur(100px);opacity:0.5}
+  .bg-blob:nth-child(1){width:500px;height:500px;background:var(--c-yellow-bg);top:-150px;left:-150px}
+  .bg-blob:nth-child(2){width:400px;height:400px;background:var(--c-pink-bg);top:30%;right:-120px}
+  .bg-blob:nth-child(3){width:350px;height:350px;background:var(--c-blue-bg);bottom:10%;left:25%}
+  .nav{position:sticky;top:0;z-index:100;background:rgba(255,253,247,0.88);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+  .nav-inner{max-width:1160px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:62px;padding:0 24px}
+  .nav-logo{font-family:var(--font-title);font-size:1.3em;color:var(--text);text-decoration:none;display:flex;align-items:center;gap:8px}
+  .nav-links{display:flex;gap:4px;list-style:none;align-items:center}
+  .nav-links a{text-decoration:none;color:var(--text2);padding:8px 18px;border-radius:50px;font-size:0.93em;font-weight:600;transition:all .3s}
+  .nav-links a:hover{background:var(--c-yellow-bg);color:var(--text)}
+  .nav-music{width:42px;height:42px;border-radius:50%;border:2px solid var(--border);background:#fff;font-size:1.2em;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;margin-left:12px}
+  .nav-music:hover{border-color:var(--c-yellow);background:var(--c-yellow-bg)}
+  .nav-music.on{border-color:var(--c-green);background:var(--c-green-bg)}
+  .nav-hamburger{display:none;background:none;border:none;font-size:1.5em;cursor:pointer}
+  .lang-switch{font-size:0.85em;padding:4px 12px;border-radius:50px;background:var(--c-purple-bg);color:var(--text);text-decoration:none;font-weight:600}
+  .container{max-width:1160px;margin:0 auto;padding:0 24px;position:relative;z-index:1}
+  section{padding:72px 0}
+  .hero{text-align:center;padding:72px 24px 48px;position:relative;z-index:1}
+  .hero-bot{font-size:110px;display:inline-block;animation:heroFloat 3s ease-in-out infinite}
+  @keyframes heroFloat{0%,100%{transform:translateY(0) rotate(-3deg)} 50%{transform:translateY(-22px) rotate(3deg)}}
+  .hero h1{font-family:var(--font-title);font-size:clamp(2em,5vw,3.2em);background:linear-gradient(135deg,var(--c-pink),var(--c-orange),var(--c-green),var(--c-blue));background-size:300% 300%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:heroGrad 6s ease infinite;margin:12px 0}
+  @keyframes heroGrad{0%,100%{background-position:0% 50%} 50%{background-position:100% 50%}}
+  .hero p{font-size:1.15em;color:var(--text2);max-width:560px;margin:0 auto 28px}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:14px 32px;border-radius:50px;font-size:1.02em;font-weight:700;font-family:var(--font-body);text-decoration:none;cursor:pointer;transition:all .3s;border:none}
+  .btn-primary{background:var(--c-yellow);color:var(--text);box-shadow:0 4px 18px rgba(255,217,61,0.45)}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(255,217,61,0.55)}
+  .btn-outline{background:#fff;color:var(--text);border:2px solid var(--border)}
+  .btn-outline:hover{border-color:var(--c-yellow);background:var(--c-yellow-bg)}
+  .btn-lg{padding:16px 38px;font-size:1.12em}
+  .btn:active{transform:scale(0.96)}
+  .sec-title{font-family:var(--font-title);font-size:2.1em;text-align:center;margin-bottom:12px}
+  .sec-sub{text-align:center;color:var(--text2);font-size:1.05em;margin-bottom:44px}
+  .course-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:24px}
+  .course-card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;transition:all .35s;display:flex;flex-direction:column;border:2px solid transparent;cursor:pointer;text-decoration:none;color:inherit}
+  .course-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-lg);border-color:var(--c-yellow)}
+  .course-card-header{padding:28px 24px 0;text-align:center}
+  .course-card-header .emoji{font-size:3.2em}
+  .course-card-body{padding:16px 24px 20px;flex:1}
+  .course-card-body h3{font-family:var(--font-title);font-size:1.2em;margin-bottom:8px}
+  .course-card-body p{color:var(--text2);font-size:0.9em;line-height:1.7}
+  .course-card-footer{padding:14px 24px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;font-size:0.84em;color:var(--text3)}
+  .hero-stats{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin-top:8px}
+  .hero-stat{background:var(--card);border-radius:18px;padding:18px 24px;box-shadow:var(--shadow);text-align:center;min-width:100px}
+  .hero-stat .num{font-family:var(--font-title);font-size:2em;color:var(--c-orange)}
+  .hero-stat .lbl{font-size:0.85em;color:var(--text3)}
+  .footer{background:#4A3728;color:#C4B5A8;padding:48px 24px 32px;position:relative;z-index:1}
+  .footer-inner{max-width:1160px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:32px}
+  .footer h4{font-family:var(--font-title);color:#fff;font-size:1.05em;margin-bottom:10px}
+  .footer a,.footer p{font-size:0.9em;color:#B8A99A;text-decoration:none;line-height:2.2}
+  .footer a:hover{color:var(--c-yellow)}
+  .footer-bottom{max-width:1160px;margin:28px auto 0;padding-top:22px;border-top:1px solid rgba(255,255,255,0.1);text-align:center;font-size:0.82em;color:#8B7B6B}
+  .path-line{position:absolute;left:31px;top:0;bottom:0;width:4px;background:linear-gradient(to bottom,var(--c-pink),var(--c-orange),var(--c-yellow),var(--c-green),var(--c-blue),var(--c-purple));border-radius:2px}
+  .path-item{display:flex;gap:20px;align-items:flex-start;margin-bottom:28px;position:relative}
+  .path-num{flex-shrink:0;width:66px;height:66px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--font-title);font-size:1.5em;color:#fff;z-index:1}
+  @media(max-width:768px){
+    .nav-links{display:none}.nav-links.open{display:flex;flex-direction:column;position:absolute;top:62px;left:0;right:0;background:rgba(255,253,247,0.97);padding:16px;gap:6px;border-bottom:1px solid var(--border)}
+    .nav-hamburger{display:block}.course-grid{grid-template-columns:1fr}.hero-bot{font-size:72px}section{padding:48px 0}
+  }
+</style>
+</head>
+<body>
+<div class="bg-layer"><div class="bg-blob"></div><div class="bg-blob"></div><div class="bg-blob"></div></div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">🤖 AI Adventure Park</a>
+    <button class="nav-hamburger" id="hamburger" aria-label="Menu">☰</button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about">About AI</a></li>
+      <li><a href="#courses">Courses</a></li>
+      <li><a href="lesson1.html">Start Learning</a></li>
+      <li><a href="../index.html" class="lang-switch">中文</a></li>
+    </ul>
+    <button class="nav-music" id="musicBtn" title="Music">🎵</button>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-bot">🤖</div>
+  <h1>A Kid's First Guide to AI</h1>
+  <p>Learn about artificial intelligence through stories, games, and hands-on experiments. Designed for kids aged 8-14.</p>
+  <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
+    <a href="lesson1.html" class="btn btn-primary btn-lg">🚀 Start Lesson 1</a>
+    <a href="#courses" class="btn btn-outline btn-lg">📚 All Courses</a>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="num">6</div><div class="lbl">Fun Lessons</div></div>
+    <div class="hero-stat"><div class="num">10+</div><div class="lbl">Experiments</div></div>
+    <div class="hero-stat"><div class="num">8-14</div><div class="lbl">Ages</div></div>
+    <div class="hero-stat"><div class="num">∞</div><div class="lbl">Imagination</div></div>
+  </div>
+</header>
+
+<section id="about">
+  <div class="container">
+    <h2 class="sec-title">✨ What is AI? In Three Sentences</h2>
+    <p class="sec-sub">Understanding artificial intelligence the kid-friendly way</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;">
+      <div style="background:var(--card);border-radius:var(--radius);padding:28px 24px;text-align:center;box-shadow:var(--shadow)">
+        <div style="font-size:3em">🧠</div>
+        <h3 style="font-family:var(--font-title);margin:8px 0">A Program That Learns</h3>
+        <p style="color:var(--text2);font-size:0.92em">AI isn't a real person — it's a clever computer program. Show it lots of examples, and it figures out patterns on its own.</p>
+      </div>
+      <div style="background:var(--card);border-radius:var(--radius);padding:28px 24px;text-align:center;box-shadow:var(--shadow)">
+        <div style="font-size:3em">🐶</div>
+        <h3 style="font-family:var(--font-title);margin:8px 0">Like Training a Puppy</h3>
+        <p style="color:var(--text2);font-size:0.92em">Just like teaching a puppy to "sit" takes practice, training AI takes repetition. This is called <b>Machine Learning</b>.</p>
+      </div>
+      <div style="background:var(--card);border-radius:var(--radius);padding:28px 24px;text-align:center;box-shadow:var(--shadow)">
+        <div style="font-size:3em">🔧</div>
+        <h3 style="font-family:var(--font-title);margin:8px 0">Just a Tool</h3>
+        <p style="color:var(--text2);font-size:0.92em">AI is like a hammer 🔨 or paintbrush 🖌️ — it's only as good as the person using it. Learning to use AI wisely is a superpower!</p>
+      </div>
+      <div style="background:var(--card);border-radius:var(--radius);padding:28px 24px;text-align:center;box-shadow:var(--shadow)">
+        <div style="font-size:3em">🌍</div>
+        <h3 style="font-family:var(--font-title);margin:8px 0">Already Everywhere</h3>
+        <p style="color:var(--text2);font-size:0.92em">Face unlock, voice assistants, video recommendations, navigation maps — AI is already part of your daily life!</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="courses" style="background:var(--bg2)">
+  <div class="container">
+    <h2 class="sec-title">📚 Six Fun Lessons</h2>
+    <p class="sec-sub">Just 10 minutes each — learn by playing!</p>
+    <div class="course-grid">
+      <a href="lesson1.html" class="course-card">
+        <div class="course-card-header"><div class="emoji">🐶</div><span style="display:inline-block;padding:4px 14px;border-radius:50px;font-size:0.78em;font-weight:600;background:var(--c-pink-bg);color:#D4687C">Lesson 1</span></div>
+        <div class="course-card-body"><h3>What is AI? — Adopt an AI Pet</h3><p>Think of AI as a virtual puppy. Learn what AI is, what it can do, and the big idea: <b>learning from data</b>.</p></div>
+        <div class="course-card-footer"><span style="padding:4px 12px;border-radius:50px;font-weight:500;font-size:0.85em;background:var(--c-pink-bg);color:#D4687C">🎯 Train Your AI Pet</span><span>⏱ 12 min</span></div>
+      </a>
+      <a href="lesson2.html" class="course-card">
+        <div class="course-card-header"><div class="emoji">📝</div><span style="display:inline-block;padding:4px 14px;border-radius:50px;font-size:0.78em;font-weight:600;background:var(--c-orange-bg);color:#E67E22">Lesson 2</span></div>
+        <div class="course-card-body"><h3>How Does AI Learn? — Visual Classifier</h3><p>Like learning vocabulary, AI learns from examples. Draw data points and watch AI find the boundary between categories!</p></div>
+        <div class="course-card-footer"><span style="padding:4px 12px;border-radius:50px;font-weight:500;font-size:0.85em;background:var(--c-orange-bg);color:#E67E22">🎯 KNN Decision Boundary</span><span>⏱ 10 min</span></div>
+      </a>
+      <a href="lesson3.html" class="course-card">
+        <div class="course-card-header"><div class="emoji">🧠</div><span style="display:inline-block;padding:4px 14px;border-radius:50px;font-size:0.78em;font-weight:600;background:var(--c-yellow-bg);color:#B8860B">Lesson 3</span></div>
+        <div class="course-card-body"><h3>Secrets of Neural Networks — AI's "Brain"</h3><p>Discover how AI copies the human brain. Click neurons to send signals and watch them travel through the network!</p></div>
+        <div class="course-card-footer"><span style="padding:4px 12px;border-radius:50px;font-weight:500;font-size:0.85em;background:var(--c-yellow-bg);color:#B8860B">🎯 Build & Fire a Network</span><span>⏱ 10 min</span></div>
+      </a>
+      <a href="lesson4.html" class="course-card">
+        <div class="course-card-header"><div class="emoji">🎮</div><span style="display:inline-block;padding:4px 14px;border-radius:50px;font-size:0.78em;font-weight:600;background:var(--c-green-bg);color:#2E7D32">Lesson 4</span></div>
+        <div class="course-card-body"><h3>AI Trainer Challenge — Cat vs Dog</h3><p>Train a real AI classifier! Feed it cat and dog pictures and watch its accuracy climb from zero to hero.</p></div>
+        <div class="course-card-footer"><span style="padding:4px 12px;border-radius:50px;font-weight:500;font-size:0.85em;background:var(--c-green-bg);color:#2E7D32">🎯 KNN Game + Streaks</span><span>⏱ 10 min</span></div>
+      </a>
+      <a href="lesson5.html" class="course-card">
+        <div class="course-card-header"><div class="emoji">🔍</div><span style="display:inline-block;padding:4px 14px;border-radius:50px;font-size:0.78em;font-weight:600;background:var(--c-blue-bg);color:#1565C0">Lesson 5</span></div>
+        <div class="course-card-body"><h3>AI Makes Mistakes Too — Bias & Blind Spots</h3><p>AI isn't perfect! See with your own eyes how biased data leads to unfair AI decisions — and what we can do about it.</p></div>
+        <div class="course-card-footer"><span style="padding:4px 12px;border-radius:50px;font-weight:500;font-size:0.85em;background:var(--c-blue-bg);color:#1565C0">🎯 Bias Experiment Lab</span><span>⏱ 10 min</span></div>
+      </a>
+      <a href="lesson6.html" class="course-card">
+        <div class="course-card-header"><div class="emoji">🚀</div><span style="display:inline-block;padding:4px 14px;border-radius:50px;font-size:0.78em;font-weight:600;background:var(--c-purple-bg);color:#6A1B9A">Lesson 6</span></div>
+        <div class="course-card-body"><h3>Design the AI Future — Creativity & Responsibility</h3><p>What will AI do in 10 years? Invent your own AI, draw with the AI art canvas, and earn your certificate!</p></div>
+        <div class="course-card-footer"><span style="padding:4px 12px;border-radius:50px;font-weight:500;font-size:0.85em;background:var(--c-purple-bg);color:#6A1B9A">🎯 AI Art + Certificate</span><span>⏱ 10 min</span></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div><h4>🤖 AI Adventure Park</h4><p>An interactive AI primer<br>for kids aged 8-14</p></div>
+    <div><h4>📚 Lessons</h4><a href="lesson1.html">1: What is AI</a><br><a href="lesson2.html">2: How AI Learns</a><br><a href="lesson3.html">3: Neural Networks</a></div>
+    <div><h4>🔗 Resources</h4><a href="https://scratch.mit.edu" target="_blank" rel="noopener">Scratch</a><br><a href="https://code.org" target="_blank" rel="noopener">Code.org</a><br><a href="https://quickdraw.withgoogle.com" target="_blank" rel="noopener">Quick, Draw!</a></div>
+    <div><h4>📬 Contact</h4><p>📧 hello@aikids.edu</p><p>🌐 Free & Open Source</p><p><a href="../index.html">中文版</a></p></div>
+  </div>
+  <div class="footer-bottom"><p>Created with Claude (Anthropic) · 2026 · For Educational Use</p></div>
+</footer>
+
+<script>
+(function(){
+  const btn=document.getElementById('musicBtn');let ctx=null,playing=false,timer=null;
+  const mel=[262,330,392,330,294,349,440,349,330,392,523,392,294,349,440,349,330,392,523,392,349,440,587,440,392,523,659,523,330,262,294,330];
+  function pn(i){if(!playing||!ctx)return;const o=ctx.createOscillator(),g=ctx.createGain();o.type=i%8<4?'sine':'triangle';o.frequency.value=mel[i%mel.length];g.gain.setValueAtTime(.04,ctx.currentTime);g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+.35);o.connect(g);g.connect(ctx.destination);o.start();o.stop(ctx.currentTime+.38);timer=setTimeout(()=>pn(i+1),340)}
+  btn.addEventListener('click',()=>{if(!ctx)ctx=new(window.AudioContext||window.webkitAudioContext)();if(playing){playing=false;clearTimeout(timer);btn.classList.remove('on');btn.textContent='🎵'}else{playing=true;btn.classList.add('on');btn.textContent='🎶';pn(0)}})
+})();
+document.getElementById('hamburger').addEventListener('click',()=>{document.getElementById('navLinks').classList.toggle('open')});
+</script>
+</body>
+</html>

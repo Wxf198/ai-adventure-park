@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第六课：设计AI未来—— AI启蒙乐园</title>
+<link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --c-yellow:#FFD93D;--c-yellow-bg:#FFF8DC;--c-pink:#FF8FA3;--c-pink-bg:#FFF0F3;
+    --c-blue:#6CB4F5;--c-blue-bg:#EEF6FF;--c-green:#6BCB77;--c-green-bg:#EDF7EE;
+    --c-purple:#B39DDB;--c-purple-bg:#F5F0FA;--c-orange:#FFB74D;
+    --bg:#FFFDF7;--text:#4A3728;--text2:#8B7355;--text3:#B8A99A;
+    --card:#FFF;--border:#EDE8E0;--shadow:0 4px 20px rgba(0,0,0,0.04);
+    --font-title:'ZCOOL KuaiLe','Noto Sans SC',cursive;--font-body:'Noto Sans SC','Microsoft YaHei',sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth;font-size:16px}
+  body{font-family:var(--font-body);background:var(--bg);color:var(--text);line-height:1.75}
+  .bg-layer{position:fixed;inset:0;pointer-events:none;z-index:0}
+  .bg-blob{position:absolute;border-radius:50%;filter:blur(90px);opacity:.45}
+  .bg-blob:nth-child(1){width:450px;height:450px;background:var(--c-purple-bg);top:-100px;right:-100px}
+  .bg-blob:nth-child(2){width:380px;height:380px;background:var(--c-yellow-bg);bottom:-80px;left:-80px}
+  .bg-blob:nth-child(3){width:300px;height:300px;background:var(--c-pink-bg);top:50%;left:50%}
+  .topnav{position:sticky;top:0;z-index:100;background:rgba(255,253,247,.9);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 20px}
+  .topnav-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:58px}
+  .topnav-back{text-decoration:none;color:var(--text2);font-weight:500;font-size:.93em}
+  .topnav-title{font-family:var(--font-title);font-size:1.15em}
+  .music-btn{width:40px;height:40px;border-radius:50%;border:2px solid var(--border);background:#fff;font-size:1.1em;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center}
+  .music-btn.on{border-color:var(--c-green);background:var(--c-green-bg)}
+  .lesson-progress{position:sticky;top:58px;z-index:99;background:rgba(255,253,247,.85);backdrop-filter:blur(8px);padding:8px 0;border-bottom:1px solid var(--border)}
+  .progress-inner{max-width:900px;margin:0 auto;padding:0 24px;display:flex;align-items:center;gap:12px}
+  .progress-bar{flex:1;height:6px;background:#EDE8E0;border-radius:3px;overflow:hidden}
+  .progress-fill{height:100%;background:linear-gradient(90deg,var(--c-purple),var(--c-pink),var(--c-yellow));border-radius:3px;transition:width .5s}
+  .progress-text{font-size:.82em;color:var(--text3)}
+  .container{max-width:900px;margin:0 auto;padding:0 24px;position:relative;z-index:1}
+  section{padding:48px 0}
+  .sec-label{display:inline-block;padding:5px 16px;border-radius:50px;font-size:.82em;font-weight:600;margin-bottom:12px}
+  .sec-title{font-family:var(--font-title);font-size:2em;margin-bottom:10px}
+  .sec-sub{color:var(--text2);font-size:1.05em;margin-bottom:28px}
+  .card{background:var(--card);border-radius:22px;box-shadow:var(--shadow);padding:28px 30px;margin-bottom:20px}
+  .card h3{font-family:var(--font-title);font-size:1.25em;margin-bottom:8px}
+  .card p,.card li{color:var(--text2);margin-bottom:6px}
+  .card ul{padding-left:20px;margin:8px 0}
+  .info-box{border-radius:16px;padding:16px 20px;margin:16px 0;font-size:.95em}
+  .info-box.tip{background:var(--c-yellow-bg);border:1px solid rgba(255,217,61,.3)}
+  .info-box.fact{background:var(--c-blue-bg);border:1px solid rgba(108,180,245,.3)}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 28px;border-radius:50px;font-size:1em;font-weight:600;font-family:var(--font-body);cursor:pointer;transition:all .3s;border:none;text-decoration:none}
+  .btn:active{transform:scale(.96)}
+  .btn-primary{background:var(--c-yellow);color:var(--text)}.btn-primary:hover{transform:translateY(-2px)}
+  .btn-purple{background:var(--c-purple);color:#fff}.btn-purple:hover{transform:translateY(-2px)}
+  .btn-pink{background:var(--c-pink);color:#fff}.btn-pink:hover{transform:translateY(-2px)}
+  .btn-outline{background:#fff;color:var(--text);border:2px solid var(--border)}.btn-outline:hover{border-color:var(--c-purple)}
+  .btn-lg{padding:15px 36px;font-size:1.1em}
+  .btn-sm{padding:8px 18px;font-size:.88em}
+  .future-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin:16px 0}
+  .future-card{background:#fff;border-radius:18px;padding:20px;text-align:center;box-shadow:var(--shadow);transition:all .3s;border:2px solid transparent}
+  .future-card:hover{transform:translateY(-4px);border-color:var(--c-purple)}
+  .future-card .icon{font-size:3em}
+  .future-card h4{font-family:var(--font-title);font-size:1.05em;margin:8px 0 4px}
+  .future-card p{font-size:.82em;color:var(--text2)}
+  .dream-area{background:#fff;border-radius:24px;box-shadow:var(--shadow);padding:24px;text-align:center}
+  #dreamCanvas{max-width:100%;border-radius:16px;border:2px solid var(--border)}
+  .invent-list{max-width:500px;margin:0 auto;text-align:left}
+  .invent-item{background:rgba(179,157,219,.1);border:1px solid rgba(179,157,219,.2);border-radius:12px;padding:12px 16px;margin:8px 0;font-size:.92em}
+  .certificate{background:linear-gradient(135deg,#FFF9F0,#FFF0F3,#EEF6FF,#F5F0FA);border:3px dashed var(--c-yellow);border-radius:24px;padding:40px 30px;text-align:center}
+  .certificate h2{font-family:var(--font-title);font-size:2em;margin:12px 0}
+  .certificate .seal{display:inline-block;width:80px;height:80px;border-radius:50%;background:var(--c-yellow);line-height:80px;font-size:2.5em;transform:rotate(-15deg);box-shadow:0 4px 12px rgba(255,217,61,.5)}
+  .footer{text-align:center;padding:36px 20px;color:var(--text3);font-size:.88em;border-top:1px solid var(--border);margin-top:32px}
+  .overlay{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.5);align-items:center;justify-content:center}
+  .overlay.show{display:flex}
+  .overlay-card{background:#fff;border-radius:24px;padding:36px;text-align:center;max-width:420px;width:90%}
+  @media(max-width:600px){.sec-title{font-size:1.5em}.card{padding:20px 16px}}
+</style>
+</head>
+<body>
+<div class="bg-layer"><div class="bg-blob"></div><div class="bg-blob"></div><div class="bg-blob"></div></div>
+
+<nav class="topnav">
+  <div class="topnav-inner">
+    <a href="index.html" class="topnav-back">← 返回大厅</a>
+    <span class="topnav-title">🚀 第六课：设计AI未来</span>
+    <button class="music-btn" id="musicBtn">🎵</button>
+  </div>
+</nav>
+
+<div class="lesson-progress">
+  <div class="progress-inner"><span>📖 学习进度</span><div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div><span class="progress-text" id="progressText">0/4</span></div>
+</div>
+
+<main class="container">
+
+  <section style="text-align:center;padding-top:60px">
+    <div style="font-size:90px;animation:heroFloat 3s ease-in-out infinite;display:inline-block">🚀</div>
+    <h1 class="sec-title" style="font-size:2.6em">设计属于你的 AI 未来！</h1>
+    <p class="sec-sub">发挥想象力，创造改变世界的 AI 发明</p>
+    <style>@keyframes heroFloat{0%,100%{transform:translateY(0) rotate(-3deg)} 50%{transform:translateY(-18px) rotate(3deg)}}</style>
+  </section>
+
+  <section id="sec1">
+    <span class="sec-label" style="background:var(--c-purple-bg);color:#6A1B9A">🔮 展望</span>
+    <h2 class="sec-title">一、AI 将改变的未来</h2>
+    <div class="future-grid">
+      <div class="future-card"><div class="icon">🏥</div><h4>AI 医生助手</h4><p>秒级分析医学影像，帮医生更快发现疾病，让偏远地区也能享受顶级诊断</p></div>
+      <div class="future-card"><div class="icon">🌾</div><h4>AI 智能农夫</h4><p>用无人机和传感器监测每一株植物的健康，精准浇水施肥，让粮食增产</p></div>
+      <div class="future-card"><div class="icon">🎓</div><h4>AI 私人家教</h4><p>为每个孩子定制专属学习计划，哪里不会教哪里，让学习变得像游戏一样有趣</p></div>
+      <div class="future-card"><div class="icon">🌍</div><h4>AI 万能翻译</h4><p>实时翻译任何语言，还能保留语气和情感。语言不再是交流的障碍</p></div>
+      <div class="future-card"><div class="icon">🐾</div><h4>AI 动物翻译</h4><p>听懂动物在说什么！你的猫"喵喵叫"可能是想说"我饿了"或"陪我玩"</p></div>
+      <div class="future-card"><div class="icon">♻️</div><h4>AI 环保卫士</h4><p>预测气候变化，优化能源使用，自动分类垃圾，保护地球家园</p></div>
+    </div>
+    <div class="info-box tip">💡 <b>这些不是科幻！</b>上面提到的每一项技术，今天都有人在研究。也许 10 年后，发明其中一项的人就是<b>你</b>。</div>
+  </section>
+
+  <section id="sec2">
+    <span class="sec-label" style="background:var(--c-pink-bg);color:#D4687C">🎨 创意</span>
+    <h2 class="sec-title">二、AI 创意画板——让AI画出你的想象</h2>
+    <p class="sec-sub">输入任何词语，AI 用颜色和图案把它的"想象"画出来</p>
+
+    <div class="dream-area">
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:12px 0">
+        <input id="dreamInput" placeholder='试试："星空"、"海洋"、"森林"、"火焰"…' style="padding:10px 18px;border-radius:50px;border:2px solid var(--border);font-size:1em;width:260px;max-width:80%;font-family:var(--font-body);background:#fff">
+        <button class="btn btn-purple btn-sm" onclick="dreamPaint()">✨ 让AI画</button>
+        <button class="btn btn-outline btn-sm" onclick="clearDream()">🔄 清空</button>
+      </div>
+      <canvas id="dreamCanvas" width="520" height="320"></canvas>
+    </div>
+  </section>
+
+  <section id="sec3">
+    <span class="sec-label" style="background:var(--c-yellow-bg);color:#B8860B">💡 发明</span>
+    <h2 class="sec-title">三、我的 AI 发明</h2>
+    <p class="sec-sub">如果你可以发明任何一个 AI，它会做什么？</p>
+
+    <div class="card" style="text-align:center">
+      <textarea id="inventInput" placeholder="我想发明一个 AI，它可以……" style="width:100%;max-width:500px;height:80px;padding:12px;border-radius:14px;border:2px solid var(--border);font-family:var(--font-body);font-size:.95em;resize:vertical"></textarea>
+      <br><button class="btn btn-purple" onclick="saveInvention()" style="margin-top:10px">💾 保存我的发明！</button>
+      <div class="invent-list" id="inventList"></div>
+    </div>
+  </section>
+
+  <section id="sec4">
+    <span class="sec-label" style="background:var(--c-green-bg);color:#2E7D32">🏆 结业</span>
+    <h2 class="sec-title">四、课程总结 + 结业证书</h2>
+
+    <div class="card">
+      <h3>📋 六课知识汇总</h3>
+      <table style="width:100%;border-collapse:collapse;font-size:.93em">
+        <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px;font-weight:600">🐶 第一课</td><td style="padding:10px;color:var(--text2)">AI 是会学习的程序，像训练宠物一样用数据教它</td></tr>
+        <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px;font-weight:600">📝 第二课</td><td style="padding:10px;color:var(--text2)">监督学习（有答案）和强化学习（靠奖励）</td></tr>
+        <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px;font-weight:600">🧠 第三课</td><td style="padding:10px;color:var(--text2)">神经网络模仿人脑，层次化处理信息</td></tr>
+        <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px;font-weight:600">🎮 第四课</td><td style="padding:10px;color:var(--text2)">训练 AI 需要数据+标签，数据越多模型越准</td></tr>
+        <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px;font-weight:600">🔍 第五课</td><td style="padding:10px;color:var(--text2)">AI 有偏见和局限，需要公平数据和人类监督</td></tr>
+        <tr><td style="padding:10px;font-weight:600">🚀 第六课</td><td style="padding:10px;color:var(--text2)">未来 AI 将改变各行各业，你就是未来的创造者</td></tr>
+      </table>
+    </div>
+
+    <!-- 结业证书 -->
+    <div class="certificate" id="certificate">
+      <div style="font-size:3em">🎓</div>
+      <h2>AI 小达人结业证书</h2>
+      <p style="font-size:1.1em">恭喜 <b id="certName">__________</b> 同学</p>
+      <p style="color:var(--text2)">完成 AI启蒙乐园全部六节课程，掌握了人工智能的基础知识，</p>
+      <p style="color:var(--text2)">并且动手实践了多个 AI 互动实验。</p>
+      <p style="margin-top:12px;font-weight:600">特发此证，以资鼓励！🌟</p>
+      <div class="seal" style="margin:16px auto 0">🏅</div>
+      <p style="margin-top:12px;font-size:.85em;color:var(--text3)">AI启蒙乐园 · 2026年</p>
+      <div style="margin-top:12px">
+        <input id="nameInput" placeholder="输入你的名字" style="padding:8px 16px;border-radius:50px;border:2px solid var(--border);font-size:1em;font-family:var(--font-body);text-align:center">
+        <button class="btn btn-pink btn-sm" onclick="updateCert()" style="margin-top:8px">✍️ 签上名字</button>
+      </div>
+      <p style="margin-top:12px;font-size:.85em;color:var(--text3)">💡 提示：可以截图保存这份证书哦！</p>
+    </div>
+  </section>
+
+  <div style="text-align:center;padding:20px 0 60px">
+    <button class="btn btn-purple btn-lg" onclick="completeLesson()">🎉 完成全部课程！</button>
+    <p style="margin-top:8px;color:var(--text3);font-size:.85em">这是最后一课，恭喜你学完了全部六节课！</p>
+  </div>
+</main>
+
+<div class="footer">
+  <p>🤖 AI启蒙乐园 · 第六课（完结） · <a href="index.html" style="color:var(--text2)">返回大厅</a></p>
+  <p style="margin-top:4px">🎉 感谢你的学习！希望未来能看到你的 AI 发明改变世界！</p>
+</div>
+
+<div class="overlay" id="completeOverlay">
+  <div class="overlay-card">
+    <div style="font-size:4em">🎓</div>
+    <h2 style="font-family:var(--font-title)">全部课程完成！</h2>
+    <p style="color:var(--text2)">你已经是一名 AI 小达人了！</p>
+    <p style="color:var(--text2);font-size:.9em">六课全部学完 · 证书已发放</p>
+    <div style="display:flex;gap:10px;justify-content:center;margin-top:12px">
+      <a href="index.html" class="btn btn-outline">🏠 返回大厅</a>
+      <button class="btn btn-purple" onclick="document.getElementById('completeOverlay').classList.remove('show')">✍️ 签证书</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// 音乐
+(function(){const btn=document.getElementById('musicBtn');let ctx=null,playing=false,timer=null;const mp3=new Audio();mp3.loop=true;mp3.volume=.25;let ml=false;mp3.src='audio/bgm-lesson.mp3';mp3.addEventListener('canplaythrough',()=>{ml=true});mp3.addEventListener('error',()=>{ml=false});const mel=[262,294,330,349,330,294,262,294,330,349,392,349,330,294,262,294,330,392,440,392,349,330,294,330,262,294,330,262,294,330,349,330];function pn(i){if(!playing||!ctx)return;const o=ctx.createOscillator(),g=ctx.createGain();o.type='sine';o.frequency.value=mel[i%mel.length];g.gain.setValueAtTime(.035,ctx.currentTime);g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+.32);o.connect(g);g.connect(ctx.destination);o.start();o.stop(ctx.currentTime+.35);timer=setTimeout(()=>pn(i+1),320)}btn.addEventListener('click',()=>{if(!ctx)ctx=new(window.AudioContext||window.webkitAudioContext)();if(playing){playing=false;ml?mp3.pause():clearTimeout(timer);btn.classList.remove('on');btn.textContent='🎵'}else{playing=true;btn.classList.add('on');btn.textContent='🎶';if(ml)mp3.play().catch(()=>{ml=false;pn(0)});else pn(0)}})})();
+
+// AI创意画板
+function hashStr(s){let h=0;for(let i=0;i<s.length;i++){h=((h<<5)-h)+s.charCodeAt(i);h|=0}return Math.abs(h)}
+function sr(seed){const x=Math.sin(seed)*10000;return x-Math.floor(x)}
+
+function dreamPaint(){
+  const cv=document.getElementById('dreamCanvas'),ctx=cv.getContext('2d');
+  const text=document.getElementById('dreamInput').value.trim();
+  if(!text){alert('请输入一个词语！');return}
+  const seed=hashStr(text);
+  ctx.clearRect(0,0,cv.width,cv.height);
+
+  // 背景
+  const bgH=sr(seed)*360;
+  const grad=ctx.createLinearGradient(0,0,cv.width,cv.height);
+  grad.addColorStop(0,`hsl(${bgH},55%,18%)`);grad.addColorStop(.5,`hsl(${(bgH+35)%360},50%,22%)`);grad.addColorStop(1,`hsl(${(bgH+70)%360},50%,15%)`);
+  ctx.fillStyle=grad;ctx.fillRect(0,0,cv.width,cv.height);
+
+  // 粒子
+  const n=70+sr(seed+1)*90;
+  for(let i=0;i<n;i++){
+    const x=sr(seed+i*3+10)*cv.width,y=sr(seed+i*7+20)*cv.height;
+    const r=sr(seed+i*11+30)*3.5+1;
+    const hue=(bgH+sr(seed+i*13)*120)%360;
+    ctx.fillStyle=`hsla(${hue},75%,${55+sr(seed+i)*35}%,${.35+sr(seed+i*2)*.5})`;
+    ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();
+  }
+
+  // 波纹
+  const rings=3+sr(seed+99)*6;
+  for(let i=0;i<rings;i++){
+    const cx=cv.width*(.15+sr(seed+i*17)*.7),cy=cv.height*(.15+sr(seed+i*19)*.7);
+    const maxR=30+sr(seed+i*23)*110;
+    const hue=(bgH+sr(seed+i*29)*180)%360;
+    ctx.strokeStyle=`hsla(${hue},65%,55%,.22)`;ctx.lineWidth=1+sr(seed+i*31)*3;
+    ctx.beginPath();ctx.arc(cx,cy,maxR,0,Math.PI*2);ctx.stroke();
+    ctx.strokeStyle=`hsla(${hue},60%,65%,.12)`;ctx.beginPath();ctx.arc(cx,cy,maxR*.55,0,Math.PI*2);ctx.stroke();
+  }
+
+  // 连线
+  const nodes=[];
+  for(let i=0;i<14;i++){nodes.push({x:sr(seed+i*41)*cv.width,y:sr(seed+i*43)*cv.height})}
+  ctx.strokeStyle='rgba(255,255,255,.07)';ctx.lineWidth=1;
+  for(let i=0;i<nodes.length;i++){for(let j=i+1;j<nodes.length;j++){if(sr(seed+i*j*53)>.5){ctx.beginPath();ctx.moveTo(nodes[i].x,nodes[i].y);ctx.lineTo(nodes[j].x,nodes[j].y);ctx.stroke()}}}
+  nodes.forEach(n=>{ctx.fillStyle='rgba(255,255,255,.45)';ctx.beginPath();ctx.arc(n.x,n.y,2.5,0,Math.PI*2);ctx.fill()})
+
+  ctx.fillStyle='rgba(255,255,255,.65)';ctx.font='bold 21px "ZCOOL KuaiLe","Noto Sans SC"';ctx.textAlign='center';
+  ctx.fillText(`"${text}" — AI 的想象`,cv.width/2,cv.height-18);
+}
+
+function clearDream(){
+  const cv=document.getElementById('dreamCanvas'),ctx=cv.getContext('2d');
+  ctx.clearRect(0,0,cv.width,cv.height);ctx.fillStyle='#bbb';ctx.font='15px "Noto Sans SC"';ctx.textAlign='center';
+  ctx.fillText('输入一个词语，让 AI 画出来 ✨',cv.width/2,cv.height/2);
+  document.getElementById('dreamInput').value='';
+}
+clearDream();
+
+// 发明记录
+function saveInvention(){
+  const input=document.getElementById('inventInput'),text=input.value.trim();
+  if(!text){alert('请先写下你的AI发明创意！');return}
+  const div=document.createElement('div');div.className='invent-item';div.textContent='💡 '+text;
+  document.getElementById('inventList').appendChild(div);
+  const invs=JSON.parse(localStorage.getItem('ai_inventions')||'[]');invs.push(text);
+  localStorage.setItem('ai_inventions',JSON.stringify(invs));input.value='';
+}
+(function loadInvs(){const invs=JSON.parse(localStorage.getItem('ai_inventions')||'[]');invs.forEach(t=>{const div=document.createElement('div');div.className='invent-item';div.textContent='💡 '+t;document.getElementById('inventList').appendChild(div)})})();
+
+// 证书
+function updateCert(){const name=document.getElementById('nameInput').value.trim();if(name)document.getElementById('certName').textContent=name}
+
+// 测验
+var qAns=[1,0,1],qDone={},qScore=0;
+function answerQ(q,opt,el){if(qDone[q]!==undefined)return;qDone[q]=opt;const all=el.closest('.quiz-q').querySelectorAll('.quiz-opt');all.forEach(o=>o.style.pointerEvents='none');if(opt===qAns[q]){el.style.borderColor='var(--c-green)';el.style.background='var(--c-green-bg)';qScore++}else{el.style.borderColor='var(--c-red)';el.style.background='var(--c-red-bg)';all[qAns[q]].style.borderColor='var(--c-green)';all[qAns[q]].style.background='var(--c-green-bg)'}if(Object.keys(qDone).length===3){const r=document.getElementById('quizResult');r.innerHTML=qScore===3?'🏆 <b style="color:var(--c-green)">全部正确！</b>':`📊 答对 ${qScore}/3 题`}}
+
+function completeLesson(){const p=JSON.parse(localStorage.getItem('ai_lessons_done')||'[]');if(!p.includes(6))p.push(6);localStorage.setItem('ai_lessons_done',JSON.stringify(p));document.getElementById('completeOverlay').classList.add('show')}
+document.getElementById('completeOverlay').addEventListener('click',function(e){if(e.target===this)this.classList.remove('show')});
+
+window.addEventListener('scroll',()=>{const secs=document.querySelectorAll('section');let n=0;secs.forEach((s,i)=>{if(s.getBoundingClientRect().top<window.innerHeight*.7)n=i+1});document.getElementById('progressFill').style.width=Math.round(n/secs.length*100)+'%';document.getElementById('progressText').textContent=n+'/'+secs.length})
+</script>
+</body>
+</html>

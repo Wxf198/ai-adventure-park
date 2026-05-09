@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 1: What is AI? — AI Discovery Lab</title>
+<meta name="description" content="Lesson 1: Discover artificial intelligence. Train your AI pet Byte and learn how AI learns from data.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --c-yellow:#FFD93D; --c-yellow-bg:#FFF8DC;
+    --c-pink:#FF8FA3;   --c-pink-bg:#FFF0F3;
+    --c-blue:#6CB4F5;   --c-blue-bg:#EEF6FF;
+    --c-green:#6BCB77;  --c-green-bg:#EDF7EE;
+    --c-purple:#B39DDB; --c-purple-bg:#F5F0FA;
+    --c-orange:#FFB74D; --c-orange-bg:#FFF6EB;
+    --c-red:#FF6B6B;    --c-red-bg:#FFEEEE;
+    --bg:#FFFDF7; --bg2:#FFF9F0;
+    --text:#4A3728; --text2:#8B7355; --text3:#B8A99A;
+    --card:#FFFFFF; --border:#EDE8E0;
+    --shadow:0 4px 20px rgba(0,0,0,0.04);
+    --shadow-lg:0 12px 40px rgba(0,0,0,0.07);
+    --radius:22px;
+    --font-title:'Fredoka One','Nunito',cursive;
+    --font-body:'Nunito','Segoe UI',sans-serif;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; font-size:16px; }
+  body { font-family:var(--font-body); background:var(--bg); color:var(--text); line-height:1.75; overflow-x:hidden; }
+
+  /* Decorative background */
+  .bg-layer { position:fixed; inset:0; pointer-events:none; z-index:0; }
+  .bg-blob { position:absolute; border-radius:50%; filter:blur(90px); opacity:0.45; }
+  .bg-blob:nth-child(1){ width:450px; height:450px; background:var(--c-pink-bg); top:-100px; right:-100px; }
+  .bg-blob:nth-child(2){ width:380px; height:380px; background:var(--c-yellow-bg); bottom:-80px; left:-80px; }
+  .bg-blob:nth-child(3){ width:300px; height:300px; background:var(--c-blue-bg); top:50%; left:50%; }
+
+  /* Top navigation */
+  .topnav { position:sticky; top:0; z-index:100; background:rgba(255,253,247,0.9); backdrop-filter:blur(16px); border-bottom:1px solid var(--border); padding:0 20px; }
+  .topnav-inner { max-width:1100px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; height:58px; }
+  .topnav-back { text-decoration:none; color:var(--text2); font-weight:500; font-size:0.93em; display:flex; align-items:center; gap:6px; transition:color .3s; }
+  .topnav-back:hover { color:var(--text); }
+  .topnav-title { font-family:var(--font-title); font-size:1.15em; }
+  .topnav-right { display:flex; align-items:center; gap:10px; }
+  .music-btn { width:40px; height:40px; border-radius:50%; border:2px solid var(--border); background:#fff; font-size:1.1em; cursor:pointer; transition:all .3s; display:flex; align-items:center; justify-content:center; }
+  .music-btn:hover { border-color:var(--c-yellow); }
+  .music-btn.on { border-color:var(--c-green); background:var(--c-green-bg); }
+
+  /* Container */
+  .container { max-width:900px; margin:0 auto; padding:0 24px; position:relative; z-index:1; }
+
+  /* Progress bar */
+  .lesson-progress { position:sticky; top:58px; z-index:99; background:rgba(255,253,247,0.85); backdrop-filter:blur(8px); padding:8px 0; border-bottom:1px solid var(--border); }
+  .progress-inner { max-width:900px; margin:0 auto; padding:0 24px; display:flex; align-items:center; gap:12px; }
+  .progress-bar { flex:1; height:6px; background:#EDE8E0; border-radius:3px; overflow:hidden; }
+  .progress-fill { height:100%; background:linear-gradient(90deg,var(--c-pink),var(--c-orange),var(--c-green)); border-radius:3px; transition:width .5s; }
+  .progress-text { font-size:0.82em; color:var(--text3); white-space:nowrap; }
+
+  /* Sections */
+  section { padding:48px 0; }
+  .sec-label { display:inline-block; padding:5px 16px; border-radius:50px; font-size:0.82em; font-weight:600; margin-bottom:12px; }
+  .sec-title { font-family:var(--font-title); font-size:2em; margin-bottom:10px; }
+  .sec-sub { color:var(--text2); font-size:1.05em; margin-bottom:28px; }
+  .card { background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:28px 30px; margin-bottom:20px; }
+  .card h3 { font-family:var(--font-title); font-size:1.25em; margin-bottom:8px; }
+  .card p { color:var(--text2); margin-bottom:8px; }
+  .card ul { margin:8px 0; padding-left:20px; color:var(--text2); }
+  .card ul li { margin-bottom:6px; }
+
+  /* Info boxes */
+  .info-box { border-radius:16px; padding:16px 20px; margin:16px 0; font-size:0.95em; }
+  .info-box.tip { background:var(--c-yellow-bg); border:1px solid rgba(255,217,61,0.3); }
+  .info-box.fact { background:var(--c-blue-bg); border:1px solid rgba(108,180,245,0.3); }
+  .info-box.warn { background:var(--c-red-bg); border:1px solid rgba(255,107,107,0.2); }
+  .info-box.good { background:var(--c-green-bg); border:1px solid rgba(107,203,119,0.3); }
+
+  /* Two columns */
+  .two-col { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+  @media(max-width:680px){ .two-col { grid-template-columns:1fr; } }
+
+  /* Buttons */
+  .btn { display:inline-flex; align-items:center; gap:8px; padding:12px 28px; border-radius:50px; font-size:1em; font-weight:600; font-family:var(--font-body); cursor:pointer; transition:all .3s; border:none; text-decoration:none; }
+  .btn:active { transform:scale(0.96); }
+  .btn-primary { background:var(--c-yellow); color:var(--text); box-shadow:0 4px 16px rgba(255,217,61,0.4); }
+  .btn-primary:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(255,217,61,0.5); }
+  .btn-pink { background:var(--c-pink); color:#fff; }
+  .btn-pink:hover { transform:translateY(-2px); }
+  .btn-blue { background:var(--c-blue); color:#fff; }
+  .btn-blue:hover { transform:translateY(-2px); }
+  .btn-green { background:var(--c-green); color:#fff; }
+  .btn-green:hover { transform:translateY(-2px); }
+  .btn-outline { background:#fff; color:var(--text); border:2px solid var(--border); }
+  .btn-outline:hover { border-color:var(--c-yellow); }
+  .btn-lg { padding:15px 36px; font-size:1.1em; }
+
+  /* ===== Pet training area ===== */
+  .pet-stage { background:linear-gradient(180deg, #FFF9F0 0%, #FFFDF7 100%); border-radius:24px; padding:24px; text-align:center; box-shadow:var(--shadow); position:relative; overflow:hidden; }
+  .pet-canvas-wrap { display:inline-block; position:relative; }
+  #petCanvas { display:block; max-width:100%; }
+  .pet-bubble { position:absolute; top:20px; left:50%; transform:translateX(-50%); background:#fff; border-radius:18px; padding:10px 18px; font-weight:600; box-shadow:0 4px 16px rgba(0,0,0,0.08); white-space:nowrap; animation:popIn .4s ease; z-index:2; }
+  .pet-bubble::after { content:''; position:absolute; bottom:-8px; left:50%; transform:translateX(-50%); width:0; height:0; border-left:10px solid transparent; border-right:10px solid transparent; border-top:10px solid #fff; }
+  @keyframes popIn { from{opacity:0;transform:translateX(-50%) scale(.8)} to{opacity:1;transform:translateX(-50%) scale(1)} }
+  .pet-actions { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin:16px 0; }
+  .pet-stats { display:flex; gap:16px; justify-content:center; flex-wrap:wrap; margin:12px 0; }
+  .pet-stat { background:#fff; border-radius:14px; padding:12px 20px; box-shadow:var(--shadow); text-align:center; }
+  .pet-stat .val { font-family:var(--font-title); font-size:1.6em; }
+  .pet-stat .lbl { font-size:0.78em; color:var(--text3); }
+  .pet-stage-indicator { display:flex; gap:8px; justify-content:center; margin:12px 0; }
+  .pet-stage-dot { width:12px; height:12px; border-radius:50%; background:#DDD; transition:all .3s; }
+  .pet-stage-dot.done { background:var(--c-green); }
+  .pet-stage-dot.current { background:var(--c-yellow); transform:scale(1.4); }
+
+  /* ===== AI Abilities cards ===== */
+  .ability-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(200px,1fr)); gap:16px; }
+  .ability-card { background:#fff; border-radius:18px; padding:22px 18px; text-align:center; box-shadow:var(--shadow); transition:all .3s; cursor:pointer; border:2px solid transparent; }
+  .ability-card:hover { transform:translateY(-4px); border-color:var(--c-blue); box-shadow:var(--shadow-lg); }
+  .ability-card .icon { font-size:2.8em; margin-bottom:8px; }
+  .ability-card h4 { font-size:1em; margin-bottom:4px; }
+  .ability-card p { font-size:0.82em; color:var(--text3); }
+  .ability-card .detail { display:none; margin-top:8px; padding:10px; background:var(--c-blue-bg); border-radius:10px; font-size:0.85em; color:var(--text); text-align:left; }
+  .ability-card.expanded .detail { display:block; animation:fadeIn .3s ease; }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+
+  /* ===== Quiz ===== */
+  .quiz-q { margin-bottom:24px; }
+  .quiz-q .q-text { font-weight:600; margin-bottom:10px; font-size:1.05em; }
+  .quiz-opts { display:flex; flex-direction:column; gap:8px; }
+  .quiz-opt { padding:12px 18px; background:#fff; border:2px solid var(--border); border-radius:14px; cursor:pointer; transition:all .3s; font-size:0.95em; }
+  .quiz-opt:hover { border-color:var(--c-yellow); background:var(--c-yellow-bg); }
+  .quiz-opt.correct { border-color:var(--c-green); background:var(--c-green-bg); animation:correctPulse .6s; }
+  .quiz-opt.wrong { border-color:var(--c-red); background:var(--c-red-bg); animation:shake .5s; }
+  @keyframes correctPulse { 0%,100%{box-shadow:0 0 0 0 rgba(107,203,119,.4)} 50%{box-shadow:0 0 0 14px rgba(107,203,119,0)} }
+  @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+
+  /* ===== Completion overlay ===== */
+  .overlay { display:none; position:fixed; inset:0; z-index:200; background:rgba(0,0,0,0.5); align-items:center; justify-content:center; }
+  .overlay.show { display:flex; }
+  .overlay-card { background:#fff; border-radius:24px; padding:36px; text-align:center; max-width:420px; width:90%; box-shadow:0 20px 60px rgba(0,0,0,0.2); animation:fadeIn .5s ease; }
+
+  /* Footer */
+  .footer { text-align:center; padding:36px 20px; color:var(--text3); font-size:0.88em; border-top:1px solid var(--border); margin-top:32px; }
+
+  @media(max-width:600px) {
+    .sec-title { font-size:1.5em; }
+    .card { padding:20px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-layer">
+  <div class="bg-blob"></div><div class="bg-blob"></div><div class="bg-blob"></div>
+</div>
+
+<!-- ===== Top navigation ===== -->
+<nav class="topnav">
+  <div class="topnav-inner">
+    <a href="index.html" class="topnav-back">&larr; Back to Lobby</a>
+    <span class="topnav-title">&#x1f436; Lesson 1: What is AI?</span>
+    <div class="topnav-right">
+      <button class="music-btn" id="musicBtn" title="Background Music">&#x1f3b5;</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== Progress bar ===== -->
+<div class="lesson-progress">
+  <div class="progress-inner">
+    <span style="font-size:0.85em;">&#x1f4d6; Progress</span>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    <span class="progress-text" id="progressText">0/4</span>
+  </div>
+</div>
+
+<!-- ===== Main content ===== -->
+<main class="container">
+
+  <!-- ========== Hero ========== -->
+  <section id="sec0" style="text-align:center; padding-top:60px;">
+    <div style="font-size:90px; animation:heroFloat 3s ease-in-out infinite; display:inline-block;">&#x1f436;</div>
+    <h1 class="sec-title" style="font-size:2.6em;">What is AI?</h1>
+    <p class="sec-sub" style="max-width:600px; margin-left:auto; margin-right:auto;">
+      Let's discover artificial intelligence together, and raise a learning AI pet&mdash;<b>Byte</b>!
+    </p>
+    <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+      <a href="#sec1" class="btn btn-primary btn-lg">&#x1f4d6; Start Learning</a>
+      <a href="#sec3" class="btn btn-outline btn-lg">&#x1f3ae; Jump to Game</a>
+    </div>
+    <style>@keyframes heroFloat{0%,100%{transform:translateY(0) rotate(-3deg)} 50%{transform:translateY(-18px) rotate(3deg)}}</style>
+  </section>
+
+  <!-- ========== Section 1: What is AI ========== -->
+  <section id="sec1">
+    <span class="sec-label" style="background:var(--c-pink-bg); color:#D4687C;">&#x1f4d6; Learn</span>
+    <h2 class="sec-title">1. What Is &ldquo;Artificial Intelligence&rdquo;?</h2>
+
+    <div class="card">
+      <h3>&#x1f916; AI = A Computer Program That Learns</h3>
+      <p><b>AI</b> (Artificial Intelligence) sounds super high-tech, but you can think of it like&mdash;</p>
+      <div class="info-box tip">
+        <b>&#x1f436; A pet puppy!</b><br>
+        A puppy isn't born knowing how to "sit" or "shake hands." You <b>teach it over and over</b>, and it slowly learns.<br><br>
+        AI works the same way: programmers show it <b>tons of examples</b> (called <b>data</b>), and AI finds <b>patterns</b> in that data to learn new skills.<br><br>
+        This process of "teaching AI" is called <b>Machine Learning</b>.
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>&#x1f524; Let's Break It Down</h3>
+      <div class="two-col">
+        <div style="text-align:center; padding:16px; background:var(--c-pink-bg); border-radius:16px;">
+          <div style="font-size:2em;">A</div>
+          <b>Artificial</b><br>
+          <span style="color:var(--text2);">Made by humans</span>
+        </div>
+        <div style="text-align:center; padding:16px; background:var(--c-blue-bg); border-radius:16px;">
+          <div style="font-size:2em;">I</div>
+          <b>Intelligence</b><br>
+          <span style="color:var(--text2);">Smarts, thinking ability</span>
+        </div>
+      </div>
+      <p style="text-align:center; margin-top:16px; font-size:1.2em;"><b>A + I = Human-Made Smarts = Artificial Intelligence</b> &#x2728;</p>
+    </div>
+
+    <div class="card">
+      <h3>&#x1f9d2; Comparing to How Humans Learn</h3>
+      <table style="width:100%; border-collapse:collapse; font-size:0.93em;">
+        <tr style="border-bottom:1px solid var(--border);">
+          <td style="padding:12px 8px; font-weight:600;">&#x1f476; Human Learning</td>
+          <td style="padding:12px 8px;">&#x1f916; AI Learning</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--border);">
+          <td style="padding:10px 8px;">Mom points to a &#x1f431; and says "this is a cat"</td>
+          <td style="padding:10px 8px;">Programmers show AI 10,000 pictures of cats</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--border);">
+          <td style="padding:10px 8px;">You remember the cat's <b>features</b></td>
+          <td style="padding:10px 8px;">AI extracts <b>features</b> from the images (pointy ears, whiskers&hellip;)</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--border);">
+          <td style="padding:10px 8px;">Next time you see a cat, you recognize it</td>
+          <td style="padding:10px 8px;">AI sees a new image &rarr; "That's a cat!" &#x1f431;</td>
+        </tr>
+        <tr>
+          <td style="padding:10px 8px;">The more examples you see, the better you get</td>
+          <td style="padding:10px 8px;">More data = a more accurate AI <b>model</b></td>
+        </tr>
+      </table>
+      <div class="info-box fact" style="margin-top:12px;">
+        &#x1f4a1; <b>Key concept:</b> AI's core ability isn't being "born smart"&mdash;it's about <b>finding patterns in lots of data</b>. Just like how you naturally figure out the method after doing 100 math problems!
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== Section 2: What AI Can Do ========== -->
+  <section id="sec2">
+    <span class="sec-label" style="background:var(--c-blue-bg); color:#1565C0;">&#x1f50d; Explore</span>
+    <h2 class="sec-title">2. What Can AI Already Do?</h2>
+    <p class="sec-sub">Click each card to discover AI's superpowers across different fields!</p>
+
+    <div class="ability-grid">
+      <div class="ability-card" onclick="this.classList.toggle('expanded')">
+        <div class="icon">&#x1f5e3;&#xfe0f;</div><h4>Speech Recognition</h4><p>Understand what people say</p>
+        <div class="detail">You shout "Hey Siri, what's the weather tomorrow?"&mdash;AI turns your voice into text, understands what you mean, and answers you. Behind the scenes are two AI technologies: <b>speech recognition</b> + <b>natural language understanding</b>.</div>
+      </div>
+      <div class="ability-card" onclick="this.classList.toggle('expanded')">
+        <div class="icon">&#x1f441;&#xfe0f;</div><h4>Image Recognition</h4><p>Recognize what's in pictures</p>
+        <div class="detail">Your phone automatically groups photos by faces, doctors use AI to read X-rays, and self-driving cars recognize street signs and pedestrians&mdash;all thanks to image recognition. AI looked at millions of pictures to learn this!</div>
+      </div>
+      <div class="ability-card" onclick="this.classList.toggle('expanded')">
+        <div class="icon">&#x1f3a8;</div><h4>Creative Content</h4><p>Write, draw, compose music</p>
+        <div class="detail">Today's AI can paint a picture from your description, write a story, or even compose a song. It learned from mountains of human creations, then "imitates" that creativity. This is called Generative AI.</div>
+      </div>
+      <div class="ability-card" onclick="this.classList.toggle('expanded')">
+        <div class="icon">&#x1f3ae;</div><h4>Playing Games</h4><p>Chess, video games &amp; more</p>
+        <div class="detail">In 2016, the AI "AlphaGo" defeated the world Go champion Lee Sedol. AI learned by playing millions of games against itself, discovering brilliant moves that humans hadn't found in thousands of years!</div>
+      </div>
+      <div class="ability-card" onclick="this.classList.toggle('expanded')">
+        <div class="icon">&#x1f697;</div><h4>Self-Driving Cars</h4><p>Cars that drive themselves</p>
+        <div class="detail">Self-driving cars are equipped with cameras and radar. AI analyzes the road in real time: recognizing traffic lights, pedestrians, and other vehicles, then making decisions to accelerate, brake, and turn&mdash;all in less than a second.</div>
+      </div>
+      <div class="ability-card" onclick="this.classList.toggle('expanded')">
+        <div class="icon">&#x1f310;</div><h4>Language Translation</h4><p>Breaking language barriers</p>
+        <div class="detail">Type a sentence in English, and AI instantly translates it into Spanish, Japanese, French&hellip; while keeping the tone and style. Traveling abroad without language worries&mdash;that's AI at work!</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== Section 3: Interactive Game - Train Your AI Pet ========== -->
+  <section id="sec3">
+    <span class="sec-label" style="background:var(--c-green-bg); color:#2E7D32;">&#x1f3ae; Interactive Game</span>
+    <h2 class="sec-title">3. Train Your AI Pet&mdash;Byte!</h2>
+    <p class="sec-sub">In this game, <b>YOU are the AI trainer</b>. Teach Byte four tricks and watch it get smarter step by step!</p>
+
+    <!-- Pet game -->
+    <div class="pet-stage" id="petStage">
+      <!-- Stage indicator -->
+      <div class="pet-stage-indicator">
+        <div class="pet-stage-dot current" id="dot1" title="Stage 1: Teach Sit"></div>
+        <div class="pet-stage-dot" id="dot2" title="Stage 2: Teach Shake"></div>
+        <div class="pet-stage-dot" id="dot3" title="Stage 3: Teach Roll"></div>
+        <div class="pet-stage-dot" id="dot4" title="Stage 4: Ultimate Test"></div>
+      </div>
+
+      <!-- Pet canvas -->
+      <div class="pet-canvas-wrap">
+        <canvas id="petCanvas" width="400" height="280"></canvas>
+        <div id="petBubble"></div>
+      </div>
+
+      <!-- Action buttons -->
+      <div class="pet-actions" id="petActions">
+        <!-- Filled by JS -->
+      </div>
+
+      <!-- Stats panel -->
+      <div class="pet-stats">
+        <div class="pet-stat">
+          <div class="val" id="statData" style="color:var(--c-blue);">0</div>
+          <div class="lbl">&#x1f4ca; Training Data</div>
+        </div>
+        <div class="pet-stat">
+          <div class="val" id="statAccuracy" style="color:var(--c-orange);">0%</div>
+          <div class="lbl">&#x1f3af; Model Accuracy</div>
+        </div>
+        <div class="pet-stat">
+          <div class="val" id="statLevel" style="color:var(--c-pink);">Lv.0</div>
+          <div class="lbl">&#x2b50; Pet Level</div>
+        </div>
+        <div class="pet-stat">
+          <div class="val" id="statSkills" style="color:var(--c-green);">0/4</div>
+          <div class="lbl">&#x1f3c5; Skills Mastered</div>
+        </div>
+      </div>
+
+      <!-- Training log -->
+      <div id="trainingLog" style="max-width:400px; margin:12px auto; text-align:left; font-size:0.85em; color:var(--text2); max-height:100px; overflow-y:auto; padding:0 8px;"></div>
+    </div>
+
+    <div class="info-box tip" style="margin-top:16px;">
+      &#x1f3af; <b>Watch closely:</b> Every time you click a training button, the data count goes up by 1&mdash;Byte has one more "experience." This is exactly how real AI works: <b>the more data, the smarter the AI!</b>
+    </div>
+  </section>
+
+  <!-- ========== Section 4: AI Around Us ========== -->
+  <section id="sec4">
+    <span class="sec-label" style="background:var(--c-purple-bg); color:#6A1B9A;">&#x1f30d; Discover</span>
+    <h2 class="sec-title">4. Spot the AI Around You</h2>
+    <p class="sec-sub">AI is already hiding in your everyday life&mdash;how many of these have you noticed?</p>
+
+    <div class="card">
+      <h3>&#x1f3e0; AI at Home</h3>
+      <ul>
+        <li>&#x1f4f1; <b>Face unlock on your phone</b>&mdash;AI recognizes your face</li>
+        <li>&#x1f3b5; <b>Spotify &amp; YouTube Music</b>&mdash;AI learns your taste and recommends songs you'll love</li>
+        <li>&#x1f4fa; <b>YouTube &amp; TikTok recommendations</b>&mdash;AI guesses what videos you want to watch</li>
+        <li>&#x1f5e3;&#xfe0f; <b>Alexa &amp; Google Assistant</b>&mdash;AI voice assistants</li>
+        <li>&#x1f4f8; <b>Beauty filters on camera apps</b>&mdash;AI detects facial features and applies effects</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>&#x1f3eb; AI at School</h3>
+      <ul>
+        <li>&#x1f4dd; <b>Essay grading</b>&mdash;some schools use AI to help teachers check assignments</li>
+        <li>&#x1f4da; <b>Smart quiz platforms</b>&mdash;AI spots your weak areas and suggests targeted practice</li>
+        <li>&#x1f310; <b>Translation tools</b>&mdash;AI helps you translate passages into other languages</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>&#x1f30d; AI Out in the World</h3>
+      <ul>
+        <li>&#x1f5fa;&#xfe0f; <b>Navigation apps</b>&mdash;AI calculates the fastest route and avoids traffic jams</li>
+        <li>&#x1f6cd;&#xfe0f; <b>Amazon &amp; online shopping</b>&mdash;AI guesses what you might want to buy</li>
+        <li>&#x1f3e5; <b>Medical AI</b>&mdash;helping doctors analyze scans and detect early-stage diseases</li>
+      </ul>
+      <div class="info-box fact">
+        &#x1f4a1; <b>See the pattern?</b> All these AI systems share one thing: they all <b>learn from massive amounts of data</b>. Recommendation systems study your watch history, navigation apps analyze millions of routes&mdash;just like how you trained Byte!
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== Section 5: Knowledge Quiz ========== -->
+  <section id="sec5">
+    <span class="sec-label" style="background:var(--c-yellow-bg); color:#B8860B;">&#x1f3c6; Quiz</span>
+    <h2 class="sec-title">5. How Much Did You Learn?</h2>
+    <p class="sec-sub">Answer the questions below to test what you've learned today!</p>
+
+    <div class="card" id="quizCard">
+      <div class="quiz-q" data-q="0">
+        <div class="q-text">1. What does "Artificial Intelligence" literally mean?</div>
+        <div class="quiz-opts">
+          <div class="quiz-opt" onclick="answerQuiz(0,0,this)">A. Human-made intelligence</div>
+          <div class="quiz-opt" onclick="answerQuiz(0,1,this)">B. Natural superpower</div>
+          <div class="quiz-opt" onclick="answerQuiz(0,2,this)">C. A super-fast computer</div>
+          <div class="quiz-opt" onclick="answerQuiz(0,3,this)">D. A robot that does chores</div>
+        </div>
+      </div>
+
+      <div class="quiz-q" data-q="1">
+        <div class="q-text">2. What is the process of teaching AI called?</div>
+        <div class="quiz-opts">
+          <div class="quiz-opt" onclick="answerQuiz(1,0,this)">A. Computer programming</div>
+          <div class="quiz-opt" onclick="answerQuiz(1,1,this)">B. Machine Learning</div>
+          <div class="quiz-opt" onclick="answerQuiz(1,2,this)">C. Web searching</div>
+          <div class="quiz-opt" onclick="answerQuiz(1,3,this)">D. Battery charging</div>
+        </div>
+      </div>
+
+      <div class="quiz-q" data-q="2">
+        <div class="q-text">3. What do you need to "feed" AI for it to learn?</div>
+        <div class="quiz-opts">
+          <div class="quiz-opt" onclick="answerQuiz(2,0,this)">A. Food and water</div>
+          <div class="quiz-opt" onclick="answerQuiz(2,1,this)">B. Electricity and WiFi</div>
+          <div class="quiz-opt" onclick="answerQuiz(2,2,this)">C. Lots of data</div>
+          <div class="quiz-opt" onclick="answerQuiz(2,3,this)">D. Screws and spare parts</div>
+        </div>
+      </div>
+
+      <div class="quiz-q" data-q="3">
+        <div class="q-text">4. Which of these is NOT an AI application?</div>
+        <div class="quiz-opts">
+          <div class="quiz-opt" onclick="answerQuiz(3,0,this)">A. Phone face unlock</div>
+          <div class="quiz-opt" onclick="answerQuiz(3,1,this)">B. Voice assistants answering questions</div>
+          <div class="quiz-opt" onclick="answerQuiz(3,2,this)">C. Navigation apps suggesting routes</div>
+          <div class="quiz-opt" onclick="answerQuiz(3,3,this)">D. Writing with a pencil</div>
+        </div>
+      </div>
+
+      <div id="quizResult" style="text-align:center; margin-top:16px; font-size:1.15em; min-height:28px;"></div>
+    </div>
+  </section>
+
+  <!-- Complete button -->
+  <div style="text-align:center; padding:20px 0 60px;">
+    <button class="btn btn-pink btn-lg" onclick="completeLesson()">&#x1f389; Complete Lesson! Earn Your Badge</button>
+    <p style="margin-top:8px; color:var(--text3); font-size:0.85em;">Your badge will be saved in your browser</p>
+  </div>
+
+</main>
+
+<div class="footer">
+  <p>&#x1f916; AI Discovery Lab &middot; Lesson 1 &middot; Created with Claude &middot; 2026</p>
+  <p><a href="index.html" style="color:var(--text2);">Back to Lobby</a> &middot; <a href="lesson2.html" style="color:var(--text2);">Next Lesson &rarr;</a></p>
+</div>
+
+<!-- ===== Completion overlay ===== -->
+<div class="overlay" id="completeOverlay">
+  <div class="overlay-card">
+    <div style="font-size:4em;">&#x1f3c5;</div>
+    <h2 style="font-family:var(--font-title); margin:12px 0;">Congratulations! Lesson 1 Complete!</h2>
+    <p style="color:var(--text2); margin-bottom:16px;">You've learned the basics of AI and trained your own AI pet, Byte!</p>
+    <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
+      <a href="index.html" class="btn btn-outline">&#x1f3e0; Back to Lobby</a>
+      <a href="lesson2.html" class="btn btn-primary">&#x1f4dd; Next Lesson &rarr;</a>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== Audio Engine ==================== -->
+<script>
+(function audioEngine(){
+  const btn = document.getElementById('musicBtn');
+  let ctx = null, playing = false, timer = null;
+
+  // Try loading MP3
+  const mp3 = new Audio();
+  mp3.loop = true;
+  mp3.volume = 0.25;
+  let mp3Loaded = false;
+
+  // Try loading local MP3 file
+  mp3.src = 'audio/bgm-lesson.mp3';
+  mp3.addEventListener('canplaythrough', ()=>{ mp3Loaded = true; });
+  mp3.addEventListener('error', ()=>{ mp3Loaded = false; });
+
+  function ensureCtx(){ if(!ctx) ctx = new(window.AudioContext||window.webkitAudioContext)(); }
+
+  // Fallback: Web Audio synthesized melody
+  const melody = [
+    262,294,330,349, 330,294,262,294, 330,349,392,349, 330,294,262,294,
+    330,392,440,392, 349,330,294,330, 262,294,330,262, 294,330,349,330
+  ];
+  function playNote(i){
+    if(!playing || !ctx) return;
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.type = 'sine';
+    o.frequency.value = melody[i % melody.length];
+    g.gain.setValueAtTime(0.035, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.32);
+    o.connect(g); g.connect(ctx.destination);
+    o.start(); o.stop(ctx.currentTime + 0.35);
+    timer = setTimeout(()=>playNote(i+1), 320);
+  }
+
+  function startMusic(){
+    if(mp3Loaded){
+      mp3.play().catch(()=>{ mp3Loaded = false; startWebAudio(); });
+    } else { startWebAudio(); }
+  }
+  function startWebAudio(){ ensureCtx(); playNote(0); }
+  function stopMusic(){
+    if(mp3Loaded) mp3.pause();
+    else { clearTimeout(timer); }
+  }
+
+  btn.addEventListener('click', ()=>{
+    ensureCtx();
+    if(playing){
+      playing = false; stopMusic();
+      btn.classList.remove('on'); btn.textContent = '\u{1F3B5}';
+    } else {
+      playing = true; startMusic();
+      btn.classList.add('on'); btn.textContent = '\u{1F3B6}';
+    }
+  });
+})();
+</script>
+
+<!-- ==================== Pet Training Game Logic ==================== -->
+<script>
+(function petGame(){
+  const canvas = document.getElementById('petCanvas');
+  const ctx = canvas.getContext('2d');
+  const bubble = document.getElementById('petBubble');
+  const log = document.getElementById('trainingLog');
+
+  // Game state
+  let trainingData = 0;
+  let skills = {};        // { sit: count, shake: count, roll: count }
+  let currentSkill = 'sit';
+  let skillStages = ['sit', 'shake', 'roll'];
+  let stageIndex = 0;
+  let petLevel = 0;
+  let animFrame = 0;
+  let petExpression = 'neutral'; // neutral, happy, excited, proud
+  let petAction = 'idle';       // idle, sitting, shaking, rolling
+  let actionTimer = 0;
+
+  // Thresholds
+  const STAGE_THRESHOLDS = { sit: 5, shake: 5, roll: 5 };
+  const LEVEL_THRESHOLDS = [0, 8, 18, 30, 50];
+
+  function initSkills(){
+    skills = { sit: 0, shake: 0, roll: 0 };
+    currentSkill = skillStages[0];
+    stageIndex = 0;
+    trainingData = 0;
+    petLevel = 0;
+    petExpression = 'neutral';
+  }
+  initSkills();
+
+  // ===== Draw pet =====
+  function drawPet(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    const cx = canvas.width/2, cy = 150;
+    const t = animFrame;
+
+    // Ground shadow
+    ctx.fillStyle = 'rgba(0,0,0,0.06)';
+    ctx.beginPath(); ctx.ellipse(cx, cy+105, 65, 8, 0, 0, Math.PI*2); ctx.fill();
+
+    const bob = Math.sin(t/40)*3;
+    const tailWag = Math.sin(t/15) * (petLevel+1) * 3;
+
+    // ---- Body ----
+    const bodyColor = petLevel >= 3 ? '#FFB74D' : petLevel >= 2 ? '#81C784' : '#64B5F6';
+    ctx.fillStyle = bodyColor;
+    ctx.beginPath();
+    if (petAction === 'rolling'){
+      // Rolling: body tilted
+      ctx.save();
+      ctx.translate(cx, cy+25);
+      ctx.rotate(Math.sin(actionTimer/10)*0.5);
+      ctx.ellipse(0, 0, 42, 30, 0, 0, Math.PI*2);
+      ctx.fill();
+      ctx.restore();
+    } else if (petAction === 'sitting'){
+      // Sitting: body lower
+      ctx.ellipse(cx, cy+35, 46, 28, 0, 0, Math.PI*2);
+      ctx.fill();
+    } else {
+      ctx.ellipse(cx, cy+28+bob, 44, 32, 0, 0, Math.PI*2);
+      ctx.fill();
+    }
+
+    // ---- Head ----
+    ctx.fillStyle = petLevel >= 3 ? '#FFCC80' : petLevel >= 2 ? '#A5D6A7' : '#90CAF9';
+    const headY = petAction === 'sitting' ? cy-10 : cy-8+bob;
+    ctx.beginPath(); ctx.arc(cx, headY, 38, 0, Math.PI*2); ctx.fill();
+
+    // ---- Ears ----
+    ctx.fillStyle = bodyColor;
+    if (petExpression === 'excited' || petExpression === 'proud'){
+      // Perked up
+      ctx.beginPath(); ctx.moveTo(cx-28, headY-28); ctx.lineTo(cx-35, headY-58); ctx.lineTo(cx-10, headY-32); ctx.fill();
+      ctx.beginPath(); ctx.moveTo(cx+28, headY-28); ctx.lineTo(cx+35, headY-58); ctx.lineTo(cx+10, headY-32); ctx.fill();
+    } else {
+      // Normal
+      ctx.beginPath(); ctx.moveTo(cx-28, headY-28); ctx.lineTo(cx-34, headY-52); ctx.lineTo(cx-12, headY-30); ctx.fill();
+      ctx.beginPath(); ctx.moveTo(cx+28, headY-28); ctx.lineTo(cx+34, headY-52); ctx.lineTo(cx+12, headY-30); ctx.fill();
+    }
+
+    // ---- Eyes ----
+    const eyeY = headY-4;
+    // Whites of eyes
+    ctx.fillStyle = '#fff';
+    ctx.beginPath(); ctx.arc(cx-13, eyeY, 11, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(cx+13, eyeY, 11, 0, Math.PI*2); ctx.fill();
+    // Pupils — grow bigger with training
+    const pupilSize = 4 + trainingData/8;
+    ctx.fillStyle = '#1a1a4e';
+    ctx.beginPath(); ctx.arc(cx-13, eyeY, Math.min(9, pupilSize), 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(cx+13, eyeY, Math.min(9, pupilSize), 0, Math.PI*2); ctx.fill();
+    // Eye highlights
+    ctx.fillStyle = '#fff';
+    ctx.beginPath(); ctx.arc(cx-10, eyeY-5, 3, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(cx+16, eyeY-5, 3, 0, Math.PI*2); ctx.fill();
+
+    // ---- Mouth ----
+    ctx.strokeStyle = '#333'; ctx.lineWidth = 2; ctx.lineCap = 'round';
+    ctx.beginPath();
+    if (petExpression === 'happy'){ ctx.arc(cx, headY+8, 10, 0.15, Math.PI-0.15); }
+    else if (petExpression === 'excited'){ ctx.arc(cx, headY+3, 12, 0.1, Math.PI-0.1); }
+    else if (petExpression === 'proud'){ ctx.arc(cx, headY+4, 8, 0.1, Math.PI-0.1); }
+    else { ctx.moveTo(cx-6, headY+10); ctx.lineTo(cx+6, headY+10); }
+    ctx.stroke();
+
+    // ---- Front paw (if shaking) ----
+    if (petAction === 'shaking'){
+      ctx.strokeStyle = bodyColor; ctx.lineWidth = 8; ctx.lineCap = 'round';
+      const pawY = headY + 25 + Math.sin(actionTimer/6)*8;
+      ctx.beginPath(); ctx.moveTo(cx+30, cy+10); ctx.lineTo(cx+42, pawY); ctx.stroke();
+      // Paw pad
+      ctx.fillStyle = '#FFCCBC';
+      ctx.beginPath(); ctx.arc(cx+42, pawY, 8, 0, Math.PI*2); ctx.fill();
+    }
+
+    // ---- Tail ----
+    ctx.strokeStyle = bodyColor; ctx.lineWidth = 5; ctx.lineCap = 'round';
+    ctx.beginPath();
+    ctx.moveTo(cx+40, cy+18+bob);
+    ctx.quadraticCurveTo(cx+60, cy-5+bob+tailWag, cx+54, cy-20+bob+tailWag);
+    ctx.stroke();
+
+    // ---- Name label ----
+    ctx.fillStyle = '#4A3728'; ctx.font = 'bold 14px "Fredoka One","Nunito",cursive'; ctx.textAlign = 'center';
+    ctx.fillText('Byte Lv.' + petLevel, cx, headY-60);
+
+    // ---- Level stars ----
+    const starCount = petLevel;
+    for (let i=0; i<starCount; i++){
+      ctx.fillText('⭐', cx - starCount*10 + i*20, headY-42);
+    }
+  }
+
+  // ===== Speech bubble =====
+  function showBubble(text, duration=2500){
+    bubble.innerHTML = '<div class="pet-bubble">' + text + '</div>';
+    setTimeout(()=>{ bubble.innerHTML = ''; }, duration);
+  }
+
+  // ===== Add training log entry =====
+  function addLog(msg){
+    const entry = document.createElement('div');
+    entry.textContent = '\u{1F4DD} ' + msg;
+    entry.style.padding = '2px 0';
+    entry.style.borderBottom = '1px solid #f5f0eb';
+    log.appendChild(entry);
+    log.scrollTop = log.scrollHeight;
+    // Keep at most 8 entries
+    while (log.children.length > 8) log.removeChild(log.firstChild);
+  }
+
+  // ===== Update stat panel =====
+  function updateStats(){
+    document.getElementById('statData').textContent = trainingData;
+    const acc = trainingData > 0 ? Math.min(99, Math.round((Object.values(skills).reduce((a,b)=>a+b,0) / Math.max(1, trainingData)) * 100 + trainingData*1.5)) : 0;
+    document.getElementById('statAccuracy').textContent = acc + '%';
+    document.getElementById('statLevel').textContent = 'Lv.' + petLevel;
+    const totalSkills = (skills.sit>=STAGE_THRESHOLDS.sit?1:0) + (skills.shake>=STAGE_THRESHOLDS.shake?1:0) + (skills.roll>=STAGE_THRESHOLDS.roll?1:0);
+    document.getElementById('statSkills').textContent = totalSkills + '/3';
+
+    // Update progress bar
+    const sections = document.querySelectorAll('section');
+    let viewedCount = 0;
+    sections.forEach((s,i)=>{
+      const rect = s.getBoundingClientRect();
+      if (rect.top < window.innerHeight*0.7) viewedCount = i+1;
+    });
+    const progressPct = Math.min(100, Math.round((viewedCount / sections.length) * 100));
+    document.getElementById('progressFill').style.width = progressPct + '%';
+    document.getElementById('progressText').textContent = viewedCount + '/' + sections.length;
+  }
+
+  // ===== Train a skill =====
+  function trainSkill(skill){
+    trainingData++;
+    skills[skill] = (skills[skill] || 0) + 1;
+    const count = skills[skill];
+
+    // Set pet action and expression
+    petExpression = 'happy';
+    if (skill === 'sit') petAction = 'sitting';
+    else if (skill === 'shake') petAction = 'shaking';
+    else if (skill === 'roll') petAction = 'rolling';
+    actionTimer = 0;
+    setTimeout(()=>{ petAction = 'idle'; petExpression = 'neutral'; }, 1500);
+
+    // Check for level-up
+    const newLevel = LEVEL_THRESHOLDS.filter(t => trainingData >= t).length - 1;
+    if (newLevel > petLevel){
+      petLevel = newLevel;
+      petExpression = 'excited';
+      const lvlMsgs = [
+        'Byte is starting to understand commands!',
+        'Byte got smarter! Leveled up to Lv.2!',
+        'Byte is evolving! Lv.3! Look at the new color!',
+        'Amazing! Byte is max level Lv.4!'
+      ];
+      showBubble('\u{1F389} ' + (lvlMsgs[petLevel-1] || 'Level up!'), 3000);
+      addLog('\u{1F31F} ' + (lvlMsgs[petLevel-1] || 'Level up!'));
+    }
+
+    // Skill mastery messages
+    const msgs = {
+      sit: [
+        '\u{1F9D8} Byte tries to sit down (' + count + 'x)',
+        'Sitting is getting more steady!',
+        '✅ Byte has fully mastered "Sit"! (' + count + 'x)'
+      ],
+      shake: [
+        '\u{1F91D} Byte reaches out a paw (' + count + 'x)',
+        'Handshake getting stronger!',
+        '✅ Byte has fully mastered "Shake"! (' + count + 'x)'
+      ],
+      roll: [
+        '\u{1F300} Byte tries to roll over (' + count + 'x)',
+        'Rolling is getting smoother!',
+        '✅ Byte has fully mastered "Roll"! (' + count + 'x)'
+      ]
+    };
+
+    const msgIdx = count >= STAGE_THRESHOLDS[skill] ? 2 : (count >= Math.ceil(STAGE_THRESHOLDS[skill]/2) ? 1 : 0);
+    showBubble(msgs[skill][msgIdx], 2200);
+    addLog(msgs[skill][msgIdx]);
+
+    // Stage advancement
+    if (count >= STAGE_THRESHOLDS[skill] && stageIndex < skillStages.length-1){
+      const currentIdx = skillStages.indexOf(skill);
+      if (currentIdx === stageIndex){
+        stageIndex++;
+        currentSkill = skillStages[stageIndex];
+        setTimeout(()=>{
+          const nextName = currentSkill === 'shake' ? 'Shake' : currentSkill === 'roll' ? 'Roll' : currentSkill;
+          showBubble('\u{1F3AF} New skill unlocked: Teach Byte "' + nextName + '"!', 3000);
+          updateButtons();
+        }, 2500);
+      }
+    }
+
+    updateButtons();
+    updateStats();
+    updateDots();
+  }
+
+  // ===== Update action buttons =====
+  function updateButtons(){
+    const container = document.getElementById('petActions');
+    const buttons = [
+      { skill:'sit', emoji:'\u{1F9D8}', label:'Teach "Sit"', color:'btn-blue', done: skills.sit >= STAGE_THRESHOLDS.sit },
+      { skill:'shake', emoji:'\u{1F91D}', label:'Teach "Shake"', color:'btn-pink', done: skills.shake >= STAGE_THRESHOLDS.shake, locked: stageIndex < 1 },
+      { skill:'roll', emoji:'\u{1F300}', label:'Teach "Roll"', color:'btn-green', done: skills.roll >= STAGE_THRESHOLDS.roll, locked: stageIndex < 2 },
+    ];
+
+    container.innerHTML = buttons.map(b => {
+      if (b.locked){
+        return '<button class="btn btn-outline" disabled style="opacity:0.4;">\u{1F512} ' + b.label + ' (Locked)</button>';
+      }
+      if (b.done){
+        return '<button class="btn ' + b.color + '" onclick="window._trainSkill(\'' + b.skill + '\')">✅ ' + b.label + ' (Mastered&mdash;keep practicing!)</button>';
+      }
+      return '<button class="btn ' + b.color + '" onclick="window._trainSkill(\'' + b.skill + '\')">' + b.emoji + ' ' + b.label + ' (' + (skills[b.skill]||0) + '/' + STAGE_THRESHOLDS[b.skill] + ')</button>';
+    }).join('');
+
+    // If all skills mastered, show ultimate message
+    const allDone = skills.sit>=STAGE_THRESHOLDS.sit && skills.shake>=STAGE_THRESHOLDS.shake && skills.roll>=STAGE_THRESHOLDS.roll;
+    if (allDone && !container.querySelector('.all-done-msg')){
+      const msg = document.createElement('div');
+      msg.className = 'all-done-msg';
+      msg.style.cssText = 'width:100%; text-align:center; margin-top:8px;';
+      msg.innerHTML = '<span style="color:var(--c-green); font-weight:600;">\u{1F31F} Awesome! Byte has learned all skills! You are an excellent AI trainer!</span>';
+      container.appendChild(msg);
+    }
+  }
+
+  function updateDots(){
+    for(let i=1;i<=4;i++){
+      const dot = document.getElementById('dot'+i);
+      dot.classList.remove('done','current');
+      if (i-1 < stageIndex) dot.classList.add('done');
+      else if (i-1 === stageIndex) dot.classList.add('current');
+    }
+  }
+
+  // Expose to global scope
+  window._trainSkill = trainSkill;
+
+  // Initialize buttons
+  updateButtons();
+
+  // ===== Animation loop =====
+  function animate(){
+    animFrame++;
+    if (actionTimer < 100) actionTimer++;
+    drawPet();
+    requestAnimationFrame(animate);
+  }
+  animate();
+
+  // ===== Scroll progress update =====
+  window.addEventListener('scroll', updateStats);
+  updateStats();
+})();
+</script>
+
+<!-- ==================== Quiz Logic ==================== -->
+<script>
+(function quiz(){
+  const answers = [0, 1, 2, 3]; // Correct answer indices
+  let answered = {};
+  let score = 0;
+
+  window.answerQuiz = function(qIdx, optIdx, el){
+    if (answered[qIdx] !== undefined) return;
+    answered[qIdx] = optIdx;
+
+    const qEl = el.closest('.quiz-q');
+    const allOpts = qEl.querySelectorAll('.quiz-opt');
+
+    if (optIdx === answers[qIdx]){
+      el.classList.add('correct');
+      score++;
+    } else {
+      el.classList.add('wrong');
+      // Highlight the correct answer
+      allOpts[answers[qIdx]].classList.add('correct');
+    }
+
+    // Disable all options
+    allOpts.forEach(o => o.style.pointerEvents = 'none');
+
+    // Check if all questions answered
+    if (Object.keys(answered).length === 4){
+      const result = document.getElementById('quizResult');
+      if (score === 4){
+        result.innerHTML = '\u{1F3C6} <b style="color:var(--c-green);">Perfect score! You are an AI whiz!</b> \u{1F389}';
+      } else if (score >= 2){
+        result.innerHTML = '\u{1F4CA} <b>You got ' + score + '/4 correct!</b> Not bad&mdash;review the sections above to get them all!';
+      } else {
+        result.innerHTML = '\u{1F4D6} <b>You got ' + score + '/4 correct.</b> Try reading through the lesson again&mdash;you\'ve got this!';
+      }
+    }
+  };
+})();
+</script>
+
+<!-- ==================== Completion Overlay ==================== -->
+<script>
+window.completeLesson = function(){
+  // Save progress
+  const progress = JSON.parse(localStorage.getItem('ai_lessons_done') || '[]');
+  if (!progress.includes(1)) progress.push(1);
+  localStorage.setItem('ai_lessons_done', JSON.stringify(progress));
+
+  document.getElementById('completeOverlay').classList.add('show');
+};
+
+// Close overlay by clicking backdrop
+document.getElementById('completeOverlay').addEventListener('click', function(e){
+  if (e.target === this) this.classList.remove('show');
+});
+</script>
+
+</body>
+</html>
