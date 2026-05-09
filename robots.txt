@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://wxf198.github.io/ai-adventure-park/sitemap.xml
