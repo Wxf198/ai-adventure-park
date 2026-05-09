@@ -73,10 +73,14 @@
   .footer a,.footer p{font-size:0.9em;color:#B8A99A;text-decoration:none;line-height:2.2}
   .footer a:hover{color:var(--c-yellow)}
   .footer-bottom{max-width:1160px;margin:28px auto 0;padding-top:22px;border-top:1px solid rgba(255,255,255,0.1);text-align:center;font-size:0.82em;color:#8B7B6B}
-  .path-line{position:absolute;left:31px;top:0;bottom:0;width:4px;background:linear-gradient(to bottom,var(--c-pink),var(--c-orange),var(--c-yellow),var(--c-green),var(--c-blue),var(--c-purple));border-radius:2px}
-  .path-item{display:flex;gap:20px;align-items:flex-start;margin-bottom:28px;position:relative}
-  .path-num{flex-shrink:0;width:66px;height:66px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--font-title);font-size:1.5em;color:#fff;z-index:1}
-  @media(max-width:768px){
+	  .path-container{position:relative;max-width:800px;margin:0 auto}
+	  .path-line{position:absolute;left:31px;top:0;bottom:0;width:4px;background:linear-gradient(to bottom,var(--c-pink),var(--c-orange),var(--c-yellow),var(--c-green),var(--c-blue),var(--c-purple));border-radius:2px}
+	  .path-item{display:flex;gap:20px;align-items:flex-start;margin-bottom:28px;position:relative}
+	  .path-num{flex-shrink:0;width:66px;height:66px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--font-title);font-size:1.5em;color:#fff;z-index:1}
+	  .path-content{background:var(--card);border-radius:16px;padding:20px 24px;box-shadow:var(--shadow);flex:1}
+	  .path-content h4{font-family:var(--font-title);margin-bottom:4px}
+	  .path-content p{color:var(--text2);font-size:0.9em}
+	  @media(max-width:768px){
     .nav-links{display:none}.nav-links.open{display:flex;flex-direction:column;position:absolute;top:62px;left:0;right:0;background:rgba(255,253,247,0.97);padding:16px;gap:6px;border-bottom:1px solid var(--border)}
     .nav-hamburger{display:block}.course-grid{grid-template-columns:1fr}.hero-bot{font-size:72px}section{padding:48px 0}
   }
@@ -92,6 +96,7 @@
     <ul class="nav-links" id="navLinks">
       <li><a href="#about">About AI</a></li>
       <li><a href="#courses">Courses</a></li>
+	      <li><a href="#path">Learning Path</a></li>
       <li><a href="lesson1.html">Start Learning</a></li>
       <li><a href="../index.html" class="lang-switch">中文</a></li>
     </ul>
@@ -179,6 +184,58 @@
         <div class="course-card-body"><h3>Design the AI Future — Creativity & Responsibility</h3><p>What will AI do in 10 years? Invent your own AI, draw with the AI art canvas, and earn your certificate!</p></div>
         <div class="course-card-footer"><span style="padding:4px 12px;border-radius:50px;font-weight:500;font-size:0.85em;background:var(--c-purple-bg);color:#6A1B9A">🎯 AI Art + Certificate</span><span>⏱ 10 min</span></div>
       </a>
+    </div>
+  </div>
+</section>
+
+<section id="path">
+  <div class="container">
+    <h2 class="sec-title">🗺️ Learning Path</h2>
+    <p class="sec-sub">From beginner to AI whiz — one step at a time</p>
+    <div class="path-container">
+      <div class="path-line"></div>
+      <div class="path-item">
+        <div class="path-num" style="background:var(--c-pink);">1</div>
+        <div class="path-content">
+          <h4>🐶 Meet AI</h4>
+          <p>Discover what artificial intelligence is and train your first AI pet named Byte. It gets smarter as you train it!</p>
+        </div>
+      </div>
+      <div class="path-item">
+        <div class="path-num" style="background:var(--c-orange);">2</div>
+        <div class="path-content">
+          <h4>📝 Understand Learning</h4>
+          <p>Use a visual classifier with your own hands. See how AI finds patterns in data and draws decision boundaries.</p>
+        </div>
+      </div>
+      <div class="path-item">
+        <div class="path-num" style="background:var(--c-yellow);">3</div>
+        <div class="path-content">
+          <h4>🧠 Go Deep Inside the Brain</h4>
+          <p>Build a neural network and watch signals travel layer by layer. Understand how AI "thinks."</p>
+        </div>
+      </div>
+      <div class="path-item">
+        <div class="path-num" style="background:var(--c-green);">4</div>
+        <div class="path-content">
+          <h4>🎮 Hands-On Training</h4>
+          <p>Become an AI trainer! Use a KNN model to tell cats from dogs and watch your accuracy climb.</p>
+        </div>
+      </div>
+      <div class="path-item">
+        <div class="path-num" style="background:var(--c-blue);">5</div>
+        <div class="path-content">
+          <h4>🔍 Discover Blind Spots</h4>
+          <p>Explore AI's limits through side-by-side experiments. Learn why fairness and good data matter.</p>
+        </div>
+      </div>
+      <div class="path-item">
+        <div class="path-num" style="background:var(--c-purple);">6</div>
+        <div class="path-content">
+          <h4>🚀 Create the Future</h4>
+          <p>Invent your own AI, bring ideas to life with the art canvas, and become a certified AI creator!</p>
+        </div>
+      </div>
     </div>
   </div>
 </section>
